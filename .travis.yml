@@ -8,6 +8,7 @@ services:
   - docker
 
 install:
+  - chmod ugo+x ./bench
   - ./bench setup docker
   - ./bench init frappe-bench
   - ./bench new-site site1.local
