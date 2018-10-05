@@ -17,7 +17,6 @@ elif [ "$1" == '-c' ]; then
     user=$1
     shift
     docker exec -i -u "$user" frappe bash -c "$@"
-
 else
     IFS=" "
     docker exec -i frappe bash -c "bench $*"

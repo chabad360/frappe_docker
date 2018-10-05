@@ -12,7 +12,7 @@ install:
   - ./bench setup docker
   - ./bench init frappe-bench
   - ./bench new-site site1.local
-  - ./bench -c "echo 127.0.0.1   site1.local >> /etc/hosts"
+  - ./bench -c root "echo 127.0.0.1   site1.local >> /etc/hosts"
   - sudo su -c 'echo 127.0.0.1   site1.local >> /etc/hosts'
   - pip install --upgrade virtualenv
   - virtualenv -p python3 testenv
