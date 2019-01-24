@@ -1,4 +1,5 @@
 version: '3.7'
+
 services:
   mariadb:
     image: mariadb
@@ -12,10 +13,11 @@ services:
       - /var/lib/mysql
     
     ports:
-      - "3307:3306" #  Mariadb port
+      - "3307:3306" # Mariadb port
     
     networks:
       frappe:
+
 
   redis-cache:
     image: redis:alpine
@@ -56,17 +58,20 @@ services:
     command: ["redis-server","/etc/conf.d/redis_socketio.conf"]
 
 
-
   frappe:
     build: .
+
     volumes:
       - ./frappe-bench:/home/frappe/frappe-bench
+
     ports:
       - "8000:8000" # Webserver port
       - "9000:9000" # Socketio port
       - "6787:6787" # File Watcher port
+
     stdin_open: true
     tty: true
+
     depends_on:
       - mariadb
       - redis-cache
