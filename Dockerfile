@@ -40,3 +40,5 @@ USER frappe
 # Add some bench files
 ADD --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
 WORKDIR /home/frappe/frappe-bench
+
+ENTRYPOINT [ "/usr/bin/entrypoint" ]
