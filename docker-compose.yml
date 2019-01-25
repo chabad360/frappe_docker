@@ -22,7 +22,7 @@ services:
     image: arm32v7/redis:alpine
 
     volumes:
-        -./conf/redis-conf.d:/etc/conf.d
+       - ./conf/redis-conf.d:/etc/conf.d
 
     command: ["redis-server","/etc/conf.d/redis_cache.conf"]
 
@@ -33,7 +33,7 @@ services:
     image: arm32v7/redis:alpine
 
     volumes:
-        -./conf/redis-conf.d:/etc/conf.d
+       - ./conf/redis-conf.d:/etc/conf.d
 
     command: ["redis-server","/etc/conf.d/redis_queue.conf"]
 
@@ -44,7 +44,7 @@ services:
     image: arm32v7/redis:alpine
 
     volumes:
-        -./conf/redis-conf.d:/etc/conf.d
+       - ./conf/redis-conf.d:/etc/conf.d
 
     command: ["redis-server","/etc/conf.d/redis_socketio.conf"]
 
