@@ -4,3 +4,4 @@ conf/*
 .travis.yml
 test.py
 dbench
+docker-*.yml
