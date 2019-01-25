@@ -2,7 +2,8 @@ language: python
 python:
   - "2.7"
 env:
-  - DOCKER_COMPOSE_VERSION: 1.23.1
+  - DOCKER_COMPOSE_VERSION=1.23.1
+  - DOCKER_COMPOSE_VERSION=1.23.1 STACK=1
 
 services:
   - docker
@@ -19,7 +20,9 @@ before_install:
 
 install:
   - chmod ugo+x ./dbench
+  - chmod ugo+x ./stack-setup.sh
   - ./dbench setup docker
+  - ./stack-setup.sh
   - ./dbench init frappe-bench
   - ./dbench new-site site1.local
   - ./dbench setup hosts
