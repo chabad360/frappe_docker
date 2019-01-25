@@ -7,14 +7,14 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=1234
       - MYSQL_USER=root
-    
+
     volumes:
       - ./conf/mariadb-conf.d:/etc/mysql/conf.d
       - /var/lib/mysql
-    
+
     ports:
       - "3307:3306" # Mariadb port
-    
+
     container_name: mariadb
 
 
@@ -61,13 +61,13 @@ services:
       - ./conf/redis-conf.d/redis_socketio.conf:/home/frappe/frappe-bench/config/redis_socketio.conf
 
     ports:
-      - "8000:8000" # Webserver port
+      - "8080:8080" # Webserver port
       - "9000:9000" # Socketio port
       - "6787:6787" # File Watcher port
-    
+
     stdin_open: true
     tty: true
-    
+
     links:
       - mariadb
       - redis-cache
@@ -79,7 +79,7 @@ services:
       - redis-cache
       - redis-queue
       - redis-socketio
-    
+
     environment:
       - MYSQL_ROOT_PASSWORD=1234
       - ADMIN_PASSQORD=admini

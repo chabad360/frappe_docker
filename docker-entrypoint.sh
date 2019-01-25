@@ -45,7 +45,9 @@ function setup_config () {
     worker_short: bench worker --queue short\n\
     worker_long: bench worker --queue long\n\
     worker_default: bench worker --queue default\n\
-    ")\ > /home/frappe/frappe-bench/sites/common_site_config_docker.json
+    ") > /home/frappe/frappe-bench/sites/common_site_config_docker.json
 }
 
 setup_config
+
+tail -f /dev/null
