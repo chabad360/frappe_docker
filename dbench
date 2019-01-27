@@ -1,12 +1,19 @@
 #!/bin/bash
 
+function run () {
+    user=$1
+    shift
+    docker exec -itu ${user} frappe bash -c "$@"
+}
+
 if [[ $# -eq 0 ]]; then
     docker exec -it frappe bash
 elif [ "$1" == 'init' ]; then
-    docker exec -itu root frappe bash -c "chown -R frappe:frappe /home/frappe"
-    docker exec -i frappe bash -c "cd .. && bench init frappe-bench --ignore-exist --skip-redis-config-generation && cd frappe-bench"
-    docker exec -i frappe bash -c "mv Procfile_docker Procfile && mv sites/common_site_config_docker.json sites/common_site_config.json && bench set-mariadb-host mariadb"
-elif [ "$1" == 'setup' ] && [ "$2" == 'docker' ]; then
+    run root "chown -R frappe:frappe /home/frappe"
+    run frappe "cd .. && bench init frappe-bench --ignore-exist --skip-redis-config-generation && cd frappe-bench"
+    run frappe "mv Procfile_docker Procfile && mv sites/common_site_config_docker.json sites/common_site_config.json && bench set-mariadb-host mariadb"
+elif [ "$1" == 'setup' ]; then
+    if [[ "$2" == 'docker' ]]; then
         if [ "$3" == '--swarm-mode' ]; then
             echo "Docker swarm mode is not currently supported"
         elif [ "$3" == 'down' ]; then
@@ -16,17 +23,18 @@ elif [ "$1" == 'setup' ] && [ "$2" == 'docker' ]; then
         else
             docker-compose up -d
         fi
-elif [ "$1" == 'setup' ] && [ "$2" == 'hosts' ]; then
+    elif [ "$2" == 'hosts' ]; then
         a=$(cd frappe-bench && ls sites/*/site_config.json | grep -o '/.\+/')
         a="${a//$'\n'/ }"
         a=$(echo $a | tr -d / )
         result="127.0.0.1 ${a}"
-        docker exec -iu root frappe bash -c "echo ${result} | tee --append /etc/hosts"
+        run root "echo ${result} | tee --append /etc/hosts"
+    fi
 elif [ "$1" == '-c' ]; then
     shift
     user=$1
     shift
-    docker exec -iu $user frappe bash -c "$@"
+    run $user "$@"
 elif [ "$1" == '-h' ]; then
     echo "$0 [-h] | [ -c frappe | root <command to run> ] [ <command to send to bench> ]"
     echo ""
@@ -46,5 +54,5 @@ elif [ "$1" == '-h' ]; then
     echo "                Runs a command in bench, i.e. $0 new-site site1.local = bench new-site site1.local"
 else
     IFS=" "
-    docker exec -it frappe bash -c "bench $*"
+    run frappe "bench $*"
 fi
