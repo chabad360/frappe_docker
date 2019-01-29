@@ -17,7 +17,7 @@ fi
 
 
 function setup_config () {
-    cat <(echo "{\n\"auto_update\": false\n\
+    cat <(echo -e "{\n\"auto_update\": false\n\
     \"background_workers\": 1,\n\
     \"db_host\": \"mariadb\",\n\
     \"file_watcher_port\": 6787,\n\
@@ -37,7 +37,7 @@ function setup_config () {
     \"admin_password\": \"${ADMIN_PASSWORD}\"\n\
     }") > /home/frappe/frappe-bench/Procfile_docker
 
-    cat <(echo "web: bench serve --port ${WEBSERVER_PORT}\n\
+    cat <(echo -e "web: bench serve --port ${WEBSERVER_PORT}\n\
     \n\
     socketio: /usr/bin/node apps/frappe/socketio.js\n\
     watch: bench watch\n\
