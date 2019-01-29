@@ -24,6 +24,8 @@ RUN curl https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-
 
 USER frappe
 WORKDIR /home/frappe
+# Add some bench files
+ADD --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
 # Download the bench utility
 RUN chown -R frappe:frappe /home/frappe \
   && git clone -b master https://github.com/frappe/bench.git bench-repo
@@ -37,8 +39,6 @@ RUN pip install -e bench-repo && rm -rf ~/.cache/pip \
   && npm install -g yarn
 
 USER frappe
-# Add some bench files
-ADD --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
 WORKDIR /home/frappe/frappe-bench
 
 ENTRYPOINT [ "/usr/bin/entrypoint" ]
