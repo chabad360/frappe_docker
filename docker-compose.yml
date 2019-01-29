@@ -56,7 +56,7 @@ services:
 
     volumes:
       - ./frappe-bench:/home/frappe/frappe-bench
-      - ./conf/redis-conf/redis_cache.conf:/home/frappe/frappe-bench/config/redis_cache.conf
+      - ./conf/redis-conf.d/redis_cache.conf:/home/frappe/frappe-bench/config/redis_cache.conf
       - ./conf/redis-conf.d/redis_socketio.conf:/home/frappe/frappe-bench/config/redis_queue.conf
       - ./conf/redis-conf.d/redis_socketio.conf:/home/frappe/frappe-bench/config/redis_socketio.conf
 
