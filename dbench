@@ -54,5 +54,5 @@ elif [ "$1" == '-h' ]; then
     echo "                Runs a command in bench, i.e. $0 new-site site1.local = bench new-site site1.local"
 else
     IFS=" "
-    run frappe "bench $@"
+    run frappe "bench $*"
 fi
