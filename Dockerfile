@@ -22,7 +22,8 @@ RUN useradd -ms /bin/bash -G sudo frappe && printf '# Sudo rules for frappe\nfra
 # Install Node.js
 RUN curl https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_armhf.deb > node.deb \
  && dpkg -i node.deb \
- && rm node.deb
+ && rm node.deb \
+ && chown -R frappe:frappe /home/frappe
 
 USER frappe
 WORKDIR /home/frappe
@@ -32,7 +33,6 @@ RUN git clone -b master https://github.com/frappe/bench.git bench-repo
 USER root
 # Install bench and yarn
 RUN pip install -e bench-repo && rm -rf ~/.cache/pip \
-  && chown -R frappe:frappe /home/frappe \
   && npm install -g yarn
 
 USER frappe
