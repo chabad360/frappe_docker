@@ -19,7 +19,7 @@ services:
 
 
   redis-cache:
-    image: arm32v7/redis:alpine
+    image: arm32v7/redis
 
     volumes:
        - ./conf/redis-conf.d:/etc/conf.d
@@ -30,7 +30,7 @@ services:
 
 
   redis-queue:
-    image: arm32v7/redis:alpine
+    image: arm32v7/redis
 
     volumes:
        - ./conf/redis-conf.d:/etc/conf.d
@@ -41,7 +41,7 @@ services:
 
 
   redis-socketio:
-    image: arm32v7/redis:alpine
+    image: arm32v7/redis
 
     volumes:
        - ./conf/redis-conf.d:/etc/conf.d
