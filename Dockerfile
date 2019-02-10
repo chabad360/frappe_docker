@@ -1,6 +1,6 @@
 # Frappe Bench Dockerfile
 
-FROM resin/armv7hf-ubuntu:xenial
+FROM balenalib/armv7hf-ubuntu:xenial
 LABEL author=frappé
 
 RUN [ "cross-build-start" ]
