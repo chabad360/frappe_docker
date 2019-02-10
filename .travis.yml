@@ -2,12 +2,17 @@ language: python
 python:
   - "2.7"
 env:
-  - DOCKER_COMPOSE_VERSION: 1.23.1
+  - DOCKER_COMPOSE_VERSION=1.23.1
+  - DOCKER_COMPOSE_VERSION=1.23.1 STACK=1
 
 services:
   - docker
 
 before_install:
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
@@ -16,7 +21,9 @@ before_install:
 install:
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
   - chmod ugo+x ./dbench
+  - chmod ugo+x ./stack-setup.sh
   - ./dbench setup docker
+  - ./stack-setup.sh
   - ./dbench init frappe-bench
   - ./dbench new-site site1.local
   - ./dbench setup hosts
