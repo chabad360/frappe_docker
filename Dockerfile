@@ -24,18 +24,16 @@ RUN curl https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-
 
 USER frappe
 WORKDIR /home/frappe
-COPY ./frappe-bench /home/frappe/frappe-bench
+COPY --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
 # Download the bench utility
-RUN chown -R frappe:frappe /home/frappe \
-  && git clone -b master https://github.com/frappe/bench.git bench-repo
+RUN git clone -b master https://github.com/frappe/bench.git bench-repo
 
 USER root
 # Install bench and yarn
 RUN pip install -e bench-repo && pip -q install -e git+https://github.com/frappe/python-pdfkit.git#egg=pdfkit && rm -rf ~/.cache/pip \
   && npm install -g yarn
-RUN mkdir /home/frappe/frappe-bench/apps && cd /home/frappe/frappe-bench/apps && git clone https://github.com/frappe/frappe.git --origin upstream \
-  && pip install -q -e frappe
-RUN yarn install
+RUN mkdir /home/frappe/frappe-bench/apps && cd /home/frappe/frappe-bench/apps && pip install -q -e git git+https://github.com/frappe/frappe.git --origin upstream \
+  && yarn install
 
 USER frappe
 WORKDIR /home/frappe/frappe-bench
