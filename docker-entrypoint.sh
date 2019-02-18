@@ -36,7 +36,7 @@ function setup_config () {
     \"update_bench_on_update\": true,\n\
     \"webserver_port\": ${WEBSERVER_PORT},\n\
     \"admin_password\": \"${ADMIN_PASSWORD}\"\n\
-    }") > /home/frappe/frappe-bench/Procfile_docker
+    }") > /home/frappe/frappe-bench/Procfile
 
     cat <(echo -e "web: bench serve --port ${WEBSERVER_PORT}\n\
     \n\
@@ -46,29 +46,22 @@ function setup_config () {
     worker_short: bench worker --queue short\n\
     worker_long: bench worker --queue long\n\
     worker_default: bench worker --queue default\n\
-    ") > /home/frappe/frappe-bench/sites/common_site_config_docker.json
+    ") > /home/frappe/frappe-bench/sites/common_site_config.json
 }
 
-setup_config
+sudo chown -R frappe:frappe frappe-bench
 
-cd .. && bench init frappe-bench --ignore-exist --skip-redis-config-generation && cd frappe-bench || exit
-mv Procfile_docker Procfile && mv sites/common_site_config_docker.json sites/common_site_config.json 
-bench set-mariadb-host mariadb
+# Setup bench
+if [[ ! -d "frappe-bench/apps/frappe" ]]; then
+    cd .. && bench init frappe-bench --ignore-exist --skip-redis-config-generation && cd frappe-bench || exit
+    setup_config
+    bench set-mariadb-host mariadb
+fi
 
+# Add a new site if it doesn't already exist (i.e. volumes)
 if [[ ! -d "/home/frappe/frappe-bench/sites/${SITE_NAME}" ]]; then
     bench new-site "${SITE_NAME}"
 fi
 
-trap "kill %?bench" HUP INT QUIT TERM
-
-# Start bench in background 
-bench start | sudo tee /var/log/bench
-
-echo "hit enter key to exit or run 'docker stop <container>'"
-read
-
-# Stop bench
-echo "stopping bench"
-kill %?bench
-
-echo "exited $0"
+# Start bench inplace of shell
+exec bench start
