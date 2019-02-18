@@ -17,6 +17,9 @@ if [[ ${SITE_NAME} == "site1.local" ]]; then
     echo "Site name not set! Using default: \"site1.local\""
 fi
 
+##### Functions
+
+# Setup bench config files
 function setup_config () {
     cat <(echo -e "{\n\"auto_update\": false\n\
     \"background_workers\": 1,\n\
@@ -49,17 +52,15 @@ function setup_config () {
     ") > /home/frappe/frappe-bench/sites/common_site_config.json
 }
 
+#### Entrypoint
+
 sudo chown -R frappe:frappe frappe-bench
 
 # Setup bench
 if [[ ! -d "frappe-bench/apps/frappe" ]]; then
-    cd .. && bench init frappe-bench --ignore-exist --skip-redis-config-generation && cd frappe-bench || exit
+    cd .. && bench init frappe-bench --ignore-exist --skip-redis-config-generation && cd frappe-bench || exit 1
     setup_config
     bench set-mariadb-host mariadb
-fi
-
-# Add a new site if it doesn't already exist (i.e. volumes)
-if [[ ! -d "/home/frappe/frappe-bench/sites/${SITE_NAME}" ]]; then
     bench new-site "${SITE_NAME}"
 fi
 
