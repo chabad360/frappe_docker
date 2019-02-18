@@ -22,19 +22,13 @@ RUN curl https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-
   && rm node.deb \
   && npm install -g yarn
 
-# Add frappe user and setup sudo
+# Add frappe user and setup sudo for it
 RUN useradd -ms /bin/bash -G sudo frappe \
   && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe
 
-USER frappe
-WORKDIR /home/frappe
-# Add some bench files
-COPY --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
-
 USER root
 # Install bench
-RUN pip install -e git+https://github.com/frappe/bench.git \
-  && rm -rf ~/.cache/pip
+RUN pip install -e git+https://github.com/frappe/bench.git --no-cache
 
 # Add entrypoint
 COPY ./docker-entrypoint.sh /bin/entrypoint
@@ -42,6 +36,8 @@ RUN chmod 777 /bin/entrypoint
 
 USER frappe
 WORKDIR /home/frappe/frappe-bench
+# Add some bench files
+COPY --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
 
 EXPOSE 8000
 EXPOSE 9000
