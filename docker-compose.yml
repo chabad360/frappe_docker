@@ -77,5 +77,6 @@ services:
       - MYSQL_ROOT_PASSWORD=1234
       - ADMIN_PASSQORD=admini
       - WEBSERVER_PORT=8080
+      - SITE_NAME=site2.local
 
     container_name: frappe

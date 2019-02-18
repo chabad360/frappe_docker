@@ -36,12 +36,22 @@ USER root
 RUN pip install -e git+https://github.com/frappe/bench.git \
   && rm -rf ~/.cache/pip
 
+# Add entrypoint
+COPY ./docker-entrypoint.sh /bin/entrypoint
+RUN chmod 777 /bin/entrypoint
+
 USER frappe
 WORKDIR /home/frappe/frappe-bench
 
-ENTRYPOINT [ "/usr/bin/entrypoint" ]
 EXPOSE 8000
 EXPOSE 9000
 EXPOSE 6787
 
 VOLUME [ "/home/frappe/frappe-bench" ]
+
+ENV MYSQL_ROOT_PASSWORD="123"
+ENV ADMIN_PASSWORD="admin"
+ENV WEBSERVER_PORT="8000"
+ENV SITE_NAME="site1.local"
+
+ENTRYPOINT [ "/bin/entrypoint" ]
