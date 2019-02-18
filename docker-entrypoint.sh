@@ -1,20 +1,21 @@
 #!/bin/bash
 
-if [[ -z ${MYSQL_ROOT_PASSWORD} ]]; then
+if [[ ${MYSQL_ROOT_PASSWORD} == "123" ]]; then
     echo "MySQL root password not set! Using default: \"123\""
-    export MYSQL_ROOT_PASSWORD=123
 fi
 
-if [[ -z ${ADMIN_PASSWORD} ]]; then
+if [[ ${ADMIN_PASSWORD} == "admin" ]]; then
     echo "Admin password not set! Using default: \"admin\""
-    export ADMIN_PASSWORD=admin
 fi
 
-if [[ -z ${WEBSERVER_PORT} ]]; then
+if [[ ${WEBSERVER_PORT} == "8000" ]]; then
     echo "Webserver port not set! Using default: \"8000\""
-    export WEBSERVER_PORT=8000
 fi
 
+
+if [[ ${SITE_NAME} == "site1.local" ]]; then
+    echo "Site name not set! Using default: \"site1.local\""
+fi
 
 function setup_config () {
     cat <(echo -e "{\n\"auto_update\": false\n\
@@ -50,4 +51,24 @@ function setup_config () {
 
 setup_config
 
-tail -f /dev/null
+cd .. && bench init frappe-bench --ignore-exist --skip-redis-config-generation && cd frappe-bench || exit
+mv Procfile_docker Procfile && mv sites/common_site_config_docker.json sites/common_site_config.json 
+bench set-mariadb-host mariadb
+
+if [[ ! -d "/home/frappe/frappe-bench/sites/${SITE_NAME}" ]]; then
+    bench new-site "${SITE_NAME}"
+fi
+
+trap "kill %?bench" HUP INT QUIT TERM
+
+# Start bench in background 
+bench start | sudo tee /var/log/bench
+
+echo "hit enter key to exit or run 'docker stop <container>'"
+read
+
+# Stop bench
+echo "stopping bench"
+kill %?bench
+
+echo "exited $0"
