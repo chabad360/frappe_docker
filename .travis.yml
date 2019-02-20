@@ -21,10 +21,7 @@ install:
   - chmod ugo+x ./dbench
   - chmod ugo+x ./stack-setup.sh
   - ./dbench setup docker
-  - ./stack-setup.sh
-  - ./dbench init frappe-bench
-  - ./dbench new-site site1.local
-  - ./dbench setup hosts
+  - sleep 5m
   - pip install --upgrade virtualenv
   - virtualenv -p python3 testenv
   - source testenv/bin/activate
