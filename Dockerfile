@@ -33,7 +33,7 @@ COPY --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
 
 USER root
 # Install bench
-RUN pip install -e git+https://github.com/frappe/bench.git \
+RUN pip install -e git+https://github.com/frappe/bench.git#egg=bench \
   && rm -rf ~/.cache/pip
 
 USER frappe
