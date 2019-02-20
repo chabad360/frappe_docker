@@ -28,7 +28,7 @@ RUN useradd -ms /bin/bash -G sudo frappe \
 
 USER root
 # Install bench
-RUN pip install -e git+https://github.com/frappe/bench.git --no-cache
+RUN pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache
 
 # Add entrypoint
 COPY ./docker-entrypoint.sh /bin/entrypoint
