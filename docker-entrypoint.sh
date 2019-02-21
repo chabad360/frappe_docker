@@ -54,10 +54,10 @@ function setup_config () {
 
 #### Entrypoint
 
-sudo chown -R frappe:frappe frappe-bench
+sudo chown -R frappe:frappe /home/frappe/frappe-bench
 
 # Setup bench
-if [[ ! -d "frappe-bench/apps/frappe" ]]; then
+if [[ ! -d "/home/frappe/frappe-bench/apps/frappe" ]]; then
     cd /home/frappe && bench init frappe-bench --ignore-exist --skip-redis-config-generation 
     cd /home/frappe/frappe-bench || exit 1
     setup_config
@@ -65,7 +65,7 @@ if [[ ! -d "frappe-bench/apps/frappe" ]]; then
 fi
 
 # Add a site if its not there (useful if you're doing multitenancy)
-if [[ ! -d /home/frappe/frappe-bench/sites/${SITE_NAME} ]]; then
+if [[ ! -d "/home/frappe/frappe-bench/sites/${SITE_NAME}" ]]; then
     bench new-site "${SITE_NAME}"
 fi
 
