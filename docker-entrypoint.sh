@@ -58,7 +58,8 @@ sudo chown -R frappe:frappe frappe-bench
 
 # Setup bench
 if [[ ! -d "frappe-bench/apps/frappe" ]]; then
-    cd /home/frappe && bench init frappe-bench --ignore-exist --skip-redis-config-generation && cd /home/frappe/frappe-bench || exit 1
+    cd /home/frappe && bench init frappe-bench --ignore-exist --skip-redis-config-generation 
+    cd /home/frappe/frappe-bench || exit 1
     setup_config
     bench set-mariadb-host mariadb
 fi
