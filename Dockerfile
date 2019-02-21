@@ -51,6 +51,6 @@ ENV WEBSERVER_PORT="8000"
 ENV SITE_NAME="site1.local"
 
 HEALTHCHECK --start-period=5m \
-  CMD curl -f http://localhost:8000 || exit 1
+  CMD curl -f http://localhost:${WEBSERVER_PORT} || exit 1
 
 ENTRYPOINT [ "/bin/entrypoint" ]
