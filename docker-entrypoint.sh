@@ -69,5 +69,7 @@ if [[ ! -d "/home/frappe/frappe-bench/sites/${SITE_NAME}" ]]; then
     bench new-site "${SITE_NAME}"
 fi
 
+echo "127.0.0.1 ${SITE_NAME}" | sudo tee -a /etc/hosts
+
 # Start bench inplace of shell
-exec bench --site "${SITE_NAME}" start
+exec bench --site "${SITE_NAME}" serve
