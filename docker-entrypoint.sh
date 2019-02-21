@@ -58,11 +58,15 @@ sudo chown -R frappe:frappe frappe-bench
 
 # Setup bench
 if [[ ! -d "frappe-bench/apps/frappe" ]]; then
-    cd .. && bench init frappe-bench --ignore-exist --skip-redis-config-generation && cd frappe-bench || exit 1
+    cd /home/frappe && bench init frappe-bench --ignore-exist --skip-redis-config-generation && cd /home/frappe/frappe-bench || exit 1
     setup_config
     bench set-mariadb-host mariadb
+fi
+
+# Add a site if its not there (useful if you're doing multitenancy)
+if [[ ! -d /home/frappe/frappe-bench/sites/${SITE_NAME} ]]; then
     bench new-site "${SITE_NAME}"
 fi
 
 # Start bench inplace of shell
-exec bench start
+exec bench --site "${SITE_NAME}" start
