@@ -20,7 +20,8 @@ fi
 
 # Setup bench config files
 function setup_config () {
-    cat <(echo -e "{\n\"auto_update\": false\n\
+    cat <(echo -e "{\n\
+    \"auto_update\": false,\n\
     \"background_workers\": 1,\n\
     \"db_host\": \"mariadb\",\n\
     \"file_watcher_port\": 6787,\n\
@@ -59,9 +60,10 @@ sudo chown -R frappe:frappe /home/frappe/frappe-bench
 if [[ ! -d "/home/frappe/frappe-bench/apps/frappe" ]]; then
     cd /home/frappe && bench init frappe-bench --ignore-exist --skip-redis-config-generation 
     cd /home/frappe/frappe-bench || exit 1
-    setup_config
     bench set-mariadb-host mariadb
 fi
+
+setup_config
 
 # Add a site if its not there (useful if you're doing multitenancy)
 if [[ ! -d "/home/frappe/frappe-bench/sites/${SITE_NAME}" ]]; then
