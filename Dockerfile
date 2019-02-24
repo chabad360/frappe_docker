@@ -26,18 +26,18 @@ RUN curl https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-
 RUN useradd -ms /bin/bash -G sudo frappe \
   && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe
 
-USER frappe
-WORKDIR /home/frappe
-# Add some bench files
-COPY --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
 
-USER root
 # Install bench
 RUN pip install -e git+https://github.com/frappe/bench.git#egg=bench \
   && rm -rf ~/.cache/pip
 
 USER frappe
-RUN bench init frappe-bench --ignore-exist --skip-redis-config-generation
+# Add some bench files
+COPY ./frappe-bench /home/frappe/frappe-bench
+RUN sudo chown -R frappe:frappe /home/frappe/frappe-bench \
+ && cd /home/frappe \
+ && bench init frappe-bench --ignore-exist --skip-redis-config-generation
+ 
 WORKDIR /home/frappe/frappe-bench
 
 EXPOSE 8000
