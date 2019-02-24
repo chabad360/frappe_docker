@@ -13,9 +13,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends iputils-ping gi
   tk8.6-dev wget libmysqlclient-dev mariadb-client mariadb-common curl rlwrap wkhtmltopdf python-pip sudo \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Setup pip
-RUN pip install --upgrade setuptools pip && rm -rf ~/.cache/pip
-
 # Install Node.js and yarn
 RUN curl https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb > node.deb \
   && dpkg -i node.deb \
