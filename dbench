@@ -3,39 +3,39 @@
 function run () {
     user=$1
     shift
-    docker exec -itu ${user} frappe bash -c "$@"
+    docker exec -itu "${user}" frappe bash -c "$@"
 }
 
 if [[ $# -eq 0 ]]; then
     docker exec -it frappe bash
-elif [ "$1" == 'init' ]; then
+elif [[ "$1" == 'init' ]]; then
     run root "chown -R frappe:frappe /home/frappe"
     run frappe "cd .. && bench init frappe-bench --ignore-exist --skip-redis-config-generation && cd frappe-bench"
     run frappe "mv Procfile_docker Procfile && mv sites/common_site_config_docker.json sites/common_site_config.json && bench set-mariadb-host mariadb"
-elif [ "$1" == 'setup' ]; then
+elif [[ "$1" == 'setup' ]]; then
     if [[ "$2" == 'docker' ]]; then
-        if [ "$3" == '--swarm-mode' ]; then
+        if [[ "$3" == '--swarm-mode' ]]; then
             echo "Docker swarm mode is not currently supported"
-        elif [ "$3" == 'down' ]; then
+        elif [[ "$3" == 'down' ]]; then
             docker-compose down
-        elif [ "$3" == 'stop' ]; then
+        elif [[ "$3" == 'stop' ]]; then
             docker-compose stop
         else
             docker-compose up -d
         fi
-    elif [ "$2" == 'hosts' ]; then
-        a=$(cd frappe-bench && ls sites/*/site_config.json | grep -o '/.\+/')
+    elif [[ "$2" == 'hosts' ]]; then
+        a=$(run frappe "ls sites/*/site_config.json | grep -o '/.\+/'") \
         a="${a//$'\n'/ }"
-        a=$(echo $a | tr -d / )
+        a=$(echo "$a" | tr -d / )
         result="127.0.0.1 ${a}"
         run root "echo ${result} | tee --append /etc/hosts"
     fi
-elif [ "$1" == '-c' ]; then
+elif [[ "$1" == '-c' ]]; then
     shift
     user=$1
     shift
-    run $user "$@"
-elif [ "$1" == '-h' ]; then
+    run "$user" "$@"
+elif [[ "$1" == '-h' ]]; then
     echo "$0 [-h] | [ -c frappe | root <command to run> ] [ <command to send to bench> ]"
     echo ""
     echo "$0 extends the Frappe Bench tool, and is used like it. However, it extends the tool in a few places."
