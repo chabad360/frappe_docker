@@ -10,7 +10,7 @@ ENV LANG C.UTF-8
 RUN apt-get update && apt-get install -y --no-install-recommends iputils-ping git build-essential python-setuptools \
   libssl-dev libjpeg8-dev redis-tools software-properties-common libxrender1 libxext6 xfonts-75dpi xfonts-base \
   python-dev libffi-dev libfreetype6-dev liblcms2-dev libwebp-dev python-tk libsasl2-dev libldap2-dev libtiff5-dev \
-  tk8.6-dev wget libmysqlclient-dev mariadb-client mariadb-common curl rlwrap wkhtmltopdf python-pip sudo cron \
+  tk8.6-dev wget libmysqlclient-dev mariadb-client mariadb-common curl rlwrap wkhtmltopdf python-pip sudo cron vim \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js and yarn
