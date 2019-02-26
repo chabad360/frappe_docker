@@ -2,8 +2,7 @@ language: python
 python:
   - "2.7"
 env:
-  - DOCKER_COMPOSE_VERSION=1.23.1
-  - DOCKER_COMPOSE_VERSION=1.23.1 STACK=1
+  - DOCKER_COMPOSE_VERSION: 1.23.1
 
 services:
   - docker
