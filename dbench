@@ -10,7 +10,7 @@ if [[ $# -eq 0 ]]; then
     docker exec -it frappe bash
 elif [[ "$1" == 'init' ]]; then
     run root "chown -R frappe:frappe /home/frappe"
-    run frappe "mv Procfile_docker Procfile && mv sites/common_site_config_docker.json sites/common_site_config.json "
+    run frappe "mv Procfile_docker Procfile && mv sites/common_site_config_docker.json sites/common_site_config.json"
     run frappe "bench set-mariadb-host mariadb"
 elif [[ "$1" == 'setup' ]]; then
     if [[ "$2" == 'docker' ]]; then
