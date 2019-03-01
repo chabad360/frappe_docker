@@ -54,7 +54,7 @@ function setup_config () {
 
 #### Entrypoint
 
-sudo chown -R frappe:frappe /home/frappe/frappe-bench
+chown -R frappe:frappe /home/frappe/frappe-bench
 
 # Setup bench
 if [[ ! -d "/home/frappe/frappe-bench/apps/frappe" ]]; then
@@ -73,4 +73,4 @@ fi
 echo "127.0.0.1 ${SITE_NAME}" | sudo tee -a /etc/hosts
 
 # Start bench inplace of shell
-exec bench --site "${SITE_NAME}" serve
+exec su-exec frappe bench --site "${SITE_NAME}" serve

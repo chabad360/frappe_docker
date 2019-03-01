@@ -22,6 +22,10 @@ RUN curl https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-
   && rm node.deb \
   && npm install -g yarn
 
+# Install su-exec (like gosu, but a lot smaller)
+RUN curl -L https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz | tar xvz && \ 
+  cd su-exec-* && make && mv su-exec /usr/local/bin && cd .. && rm -rf su-exec-*
+
 # Add frappe user and setup sudo for it
 RUN useradd -ms /bin/bash -G sudo frappe \
   && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe
@@ -34,8 +38,6 @@ RUN pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache
 COPY ./docker-entrypoint.sh /bin/entrypoint
 RUN chmod 777 /bin/entrypoint
 
-USER frappe
-WORKDIR /home/frappe/frappe-bench
 # Add some bench files
 COPY --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
 
