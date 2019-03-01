@@ -16,6 +16,8 @@ if [[ ${SITE_NAME} == "site1.local" ]]; then
     echo "Site name not set! Using default: \"site1.local\""
 fi
 
+bench_home=/home/frappe/frappe-bench
+
 ##### Functions
 
 # Setup bench config files
@@ -39,7 +41,7 @@ function setup_config () {
     \"update_bench_on_update\": true,\n\
     \"webserver_port\": ${WEBSERVER_PORT},\n\
     \"admin_password\": \"${ADMIN_PASSWORD}\"\n\
-    }") > /home/frappe/frappe-bench/sites/common_site_config.json
+    }") > ${bench_home}/sites/common_site_config.json
 
     cat <(echo -e "web: bench serve --port ${WEBSERVER_PORT}\n\
     \n\
@@ -49,28 +51,31 @@ function setup_config () {
     worker_short: bench worker --queue short\n\
     worker_long: bench worker --queue long\n\
     worker_default: bench worker --queue default\n\
-    ") > /home/frappe/frappe-bench/Procfile
+    ") > ${bench_home}/Procfile
 }
 
 #### Entrypoint
 
-chown -R frappe:frappe /home/frappe/frappe-bench
+chown -R frappe:frappe ${bench_home}
+
+echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
+
+exec su-exec frappe <<EOF
 
 # Setup bench
-if [[ ! -d "/home/frappe/frappe-bench/apps/frappe" ]]; then
+if [[ ! -d "${bench_home}/apps/frappe" ]]; then
     cd /home/frappe && bench init frappe-bench --ignore-exist --skip-redis-config-generation 
-    cd /home/frappe/frappe-bench || exit 1
+    cd ${bench_home} || exit 1
     bench set-mariadb-host mariadb
 fi
 
 setup_config
 
 # Add a site if its not there (useful if you're doing multitenancy)
-if [[ ! -d "/home/frappe/frappe-bench/sites/${SITE_NAME}" ]]; then
+if [[ ! -d "${bench_home}/sites/${SITE_NAME}" ]]; then
     bench new-site "${SITE_NAME}"
 fi
 
-echo "127.0.0.1 ${SITE_NAME}" | sudo tee -a /etc/hosts
-
 # Start bench inplace of shell
-exec su-exec frappe bench --site "${SITE_NAME}" serve
+exec frappe bench --site "${SITE_NAME}" serve
+EOF
