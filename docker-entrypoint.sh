@@ -64,7 +64,7 @@ exec su-exec frappe <<EOF
 
 # Setup bench
 if [[ ! -d "${bench_home}/apps/frappe" ]]; then
-    cd /home/frappe && bench init frappe-bench --ignore-exist --skip-redis-config-generation 
+    cd /home/frappe && bench init frappe-bench --skip-redis-config-generation 
     cd ${bench_home} || exit 1
     bench set-mariadb-host ${MARIADB_HOST}
 fi

@@ -28,7 +28,8 @@ RUN curl -L https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac5612
 
 # Add frappe user and setup sudo for it
 RUN useradd -ms /bin/bash -G sudo frappe \
-  && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe
+  && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe \
+  && mkdir /home/frappe/frappe-bench
 
 USER root
 # Install bench
@@ -37,9 +38,6 @@ RUN pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache
 # Add entrypoint
 COPY ./docker-entrypoint.sh /bin/entrypoint
 RUN chmod 777 /bin/entrypoint
-
-# Add some bench files
-COPY --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
 
 EXPOSE 8000
 EXPOSE 9000
