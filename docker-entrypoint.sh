@@ -60,22 +60,19 @@ chown -R frappe:frappe ${bench_home}
 
 echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
 
-exec su-exec frappe <<EOF
-
 # Setup bench
 if [[ ! -d "${bench_home}/apps/frappe" ]]; then
-    cd /home/frappe && bench init frappe-bench --skip-redis-config-generation 
+    cd /home/frappe && su-exec frappe bench init frappe-bench --ignore-exist --skip-redis-config-generation 
     cd ${bench_home} || exit 1
-    bench set-mariadb-host ${MARIADB_HOST}
+    su-exec frappe bench set-mariadb-host ${MARIADB_HOST}
 fi
 
 setup_config
 
 # Add a site if its not there (useful if you're doing multitenancy)
 if [[ ! -d "${bench_home}/sites/${SITE_NAME}" ]]; then
-    bench new-site "${SITE_NAME}"
+    su-exec frappe bench new-site "${SITE_NAME}"
 fi
 
 # Start bench inplace of shell
 exec frappe bench --site "${SITE_NAME}" serve
-EOF
