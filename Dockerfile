@@ -7,9 +7,9 @@ LABEL author=frappé
 ENV LANG C.UTF-8
 
 # Install all neccesary packages
-RUN apt-get update && apt-get install -y --no-install-recommends iputils-ping git build-essential \
+RUN apt-get update && apt-get install -y --no-install-recommends iputils-ping git build-essential cron \
   libffi-dev libssl-dev libjpeg8-dev redis-tools software-properties-common libxext6 xfonts-75dpi xfonts-base \
-  python-dev libfreetype6-dev liblcms2-dev libwebp-dev python-tk libsasl2-dev libldap2-dev libtiff5-dev \
+  python-dev libfreetype6-dev liblcms2-dev libwebp-dev python-tk libsasl2-dev libldap2-dev libtiff5-dev vim \
   python-setuptools tk8.6-dev wget libmysqlclient-dev mariadb-client curl rlwrap wkhtmltopdf python-pip sudo \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN pip install --upgrade setuptools pip && rm -rf ~/.cache/pip
