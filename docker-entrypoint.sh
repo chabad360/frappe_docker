@@ -56,7 +56,7 @@ function setup_config () {
 
 #### Entrypoint
 
-chown -R frappe:frappe ${bench_home}
+chown -R frappe:frappe /home/frappe
 
 echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
 
@@ -74,6 +74,7 @@ if [[ ! -d "${bench_home}/sites/${SITE_NAME}" ]]; then
     su-exec frappe bench new-site "${SITE_NAME}"
 fi
 
+chown -R frappe:frappe ${bench_home}
 cd ${bench_home} || exit 1
 
 # Start bench inplace of shell
