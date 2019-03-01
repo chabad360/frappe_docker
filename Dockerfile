@@ -22,16 +22,11 @@ RUN curl https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-
   && rm node.deb \
   && npm install -g yarn
 
-# Install su-exec (like gosu, but a lot smaller)
-RUN curl -L https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz | tar xvz && \ 
-  cd su-exec-* && make && mv su-exec /usr/local/bin && cd .. && rm -rf su-exec-*
-
 # Add frappe user and setup sudo for it
 RUN useradd -ms /bin/bash -G sudo frappe \
   && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe \
   && mkdir /home/frappe/frappe-bench
 
-USER root
 # Install bench
 RUN pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache
 
@@ -58,5 +53,7 @@ ENV MARIADB_HOST="mariadb"
 
 HEALTHCHECK --start-period=5m \
   CMD curl -f http://localhost:${WEBSERVER_PORT} || exit 1
+
+USER frappe
 
 ENTRYPOINT [ "/bin/entrypoint" ]

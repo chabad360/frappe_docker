@@ -56,26 +56,26 @@ function setup_config () {
 
 #### Entrypoint
 
-chown -R frappe:frappe /home/frappe
+sudo chown -R frappe:frappe /home/frappe
 
-echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
+echo "127.0.0.1 ${SITE_NAME}" | sudo tee -a /etc/hosts
 
 # Setup bench
 if [[ ! -d "${bench_home}/apps/frappe" ]]; then
-    cd /home/frappe && su-exec frappe bench init frappe-bench --ignore-exist --skip-redis-config-generation 
+    cd /home/frappe && bench init frappe-bench --ignore-exist --skip-redis-config-generation 
     cd ${bench_home} || exit 1
-    su-exec frappe bench set-mariadb-host ${MARIADB_HOST}
+    bench set-mariadb-host ${MARIADB_HOST}
 fi
 
 setup_config
 
 # Add a site if its not there (useful if you're doing multitenancy)
 if [[ ! -d "${bench_home}/sites/${SITE_NAME}" ]]; then
-    su-exec frappe bench new-site "${SITE_NAME}"
+    bench new-site "${SITE_NAME}"
 fi
 
-chown -R frappe:frappe ${bench_home}
+sudo chown -R frappe:frappe ${bench_home}
 cd ${bench_home} || exit 1
 
 # Start bench inplace of shell
-su-exec frappe bench --site "${SITE_NAME}" serve
+exec bench --site "${SITE_NAME}" serve
