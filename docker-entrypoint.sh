@@ -25,14 +25,14 @@ function setup_config () {
     cat <(echo -e "{\n\
     \"auto_update\": false,\n\
     \"background_workers\": 1,\n\
-    \"db_host\": \"mariadb\",\n\
+    \"db_host\": \"${MARIADB_HOST}\",\n\
     \"file_watcher_port\": 6787,\n\
     \"frappe_user\": \"frappe\",\n\
     \"gunicorn_workers\": 4,\n\
     \"rebase_on_pull\": false,\n\
-    \"redis_cache\": \"redis://redis-cache:13000\",\n\
-    \"redis_queue\": \"redis://redis-queue:11000\",\n\
-    \"redis_socketio\": \"redis://redis-socketio:12000\",\n\
+    \"redis_cache\": \"redis://${REDIS_CACHE_HOST}:13000\",\n\
+    \"redis_queue\": \"redis://${REDIS_QUEUE_HOST}:11000\",\n\
+    \"redis_socketio\": \"redis://${REDIS_SOCKETIO_HOST}:12000\",\n\
     \"restart_supervisor_on_update\": false,\n\
     \"root_password\": \"${MYSQL_ROOT_PASSWORD}\",\n\
     \"serve_default_site\": true,\n\
@@ -66,7 +66,7 @@ exec su-exec frappe <<EOF
 if [[ ! -d "${bench_home}/apps/frappe" ]]; then
     cd /home/frappe && bench init frappe-bench --ignore-exist --skip-redis-config-generation 
     cd ${bench_home} || exit 1
-    bench set-mariadb-host mariadb
+    bench set-mariadb-host ${MARIADB_HOST}
 fi
 
 setup_config
