@@ -74,5 +74,7 @@ if [[ ! -d "${bench_home}/sites/${SITE_NAME}" ]]; then
     su-exec frappe bench new-site "${SITE_NAME}"
 fi
 
+cd ${bench_home} || exit 1
+
 # Start bench inplace of shell
-exec frappe bench --site "${SITE_NAME}" serve
+su-exec frappe bench --site "${SITE_NAME}" serve
