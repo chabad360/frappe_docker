@@ -28,7 +28,6 @@ USER root
 RUN pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache
 COPY --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
 
-
 USER frappe
 WORKDIR /home/frappe/frappe-bench
 
