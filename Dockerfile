@@ -35,6 +35,7 @@ RUN sudo chown -R frappe:frappe /home/frappe/
 WORKDIR /home/frappe
 RUN bench init frappe-bench --ignore-exist --skip-redis-config-generation
 
+WORKDIR /home/frappe/frappe-bench
 
 EXPOSE 8000
 EXPOSE 9000
