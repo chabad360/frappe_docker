@@ -3,6 +3,8 @@
 FROM debian:9.6-slim
 LABEL author=frappé
 
+ENV LANG=C.UTF-8
+
 # Install all neccesary packages
 RUN apt-get update && apt-get install -y --no-install-recommends cron=3.0pl1-128+deb9u1 curl=7.52.1-5+deb9u9 git=1:2.11.0-3+deb9u4 \
   libmariadbclient-dev=10.1.37-0+deb9u1 mariadb-client=10.1.37-0+deb9u1 python3-dev=3.5.3-1 python-minimal=2.7.13-2 python3-pip=9.0.1-2 \
