@@ -1,9 +1,5 @@
 #!/bin/bash
 
-cat <(./dbench start) &
-
-sleep 5
-
 while ! [[ $i == 20 ]]
 do
     output=$( curl "http://localhost:8000" )
