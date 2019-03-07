@@ -13,7 +13,7 @@ services:
       - /var/lib/mysql
     
     ports:
-      - "3307:3306" # Mariadb port
+      - "3307:3306" #mariadb-port
     
     container_name: mariadb
 
@@ -31,6 +31,7 @@ services:
 
   redis-queue:
     image: arm32v7/redis
+
 
     volumes:
       - ./conf/redis-conf.d:/etc/conf.d
