@@ -40,12 +40,12 @@ function setup_config () {
 
 #### Entrypoint
 
-echo "127.0.0.1 ${SITE_NAME}" | sudo tee -a /etc/hosts
-chown -R frappe:frappe ${BENCH}
+echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
+chown -R frappe ${BENCH}
 
 # Setup bench
-if [[ -z "$(ls -A "${BENCH}")" ]]; then
-    su-exec frappe bench init frappe-bench --ignore-exist --skip-redis-config-generation
+if [[ ! -d "${BENCH}/sites" ]]; then
+    su-exec frappe bench init ${BENCH} --ignore-exist --skip-redis-config-generation
 fi
 
 cd ${BENCH} || exit 1
@@ -53,7 +53,7 @@ setup_config
 
 # Add a site if its not there (useful if you're doing multitenancy)
 if [[ ! -d "${BENCH}/sites/${SITE_NAME}" ]]; then
-    su-exec frappe bench new-site "${SITE_NAME}"
+     su-exec frappe bench new-site "${SITE_NAME}"
 fi
 
 # Start bench inplace of shell
