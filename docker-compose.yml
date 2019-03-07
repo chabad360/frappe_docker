@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   mariadb:
-    image: chabad360/mariadb-armhf
+    image: apcheamitru/arm32v6-mariadb
 
     environment:
       - MYSQL_ROOT_PASSWORD=123
