@@ -1,22 +1,6 @@
 #!/bin/bash
 
-if [[ ${MYSQL_ROOT_PASSWORD} == "123" ]]; then
-    echo "MySQL root password not set! Using default: \"123\""
-fi
-
-if [[ ${ADMIN_PASSWORD} == "admin" ]]; then
-    echo "Admin password not set! Using default: \"admin\""
-fi
-
-if [[ ${WEBSERVER_PORT} == "8000" ]]; then
-    echo "Webserver port not set! Using default: \"8000\""
-fi
-
-if [[ ${SITE_NAME} == "site1.local" ]]; then
-    echo "Site name not set! Using default: \"site1.local\""
-fi
-
-bench_home=/home/frappe/frappe-bench
+set -e
 
 ##### Functions
 
@@ -41,7 +25,7 @@ function setup_config () {
     \"update_bench_on_update\": true,\n\
     \"webserver_port\": ${WEBSERVER_PORT},\n\
     \"admin_password\": \"${ADMIN_PASSWORD}\"\n\
-    }") > ${bench_home}/sites/common_site_config.json
+    }") > ${BENCH}/sites/common_site_config.json
 
     cat <(echo -e "web: bench serve --port ${WEBSERVER_PORT}\n\
     \n\
@@ -51,31 +35,26 @@ function setup_config () {
     worker_short: bench worker --queue short\n\
     worker_long: bench worker --queue long\n\
     worker_default: bench worker --queue default\n\
-    ") > ${bench_home}/Procfile
+    ") > ${BENCH}/Procfile
 }
 
 #### Entrypoint
 
-sudo chown -R frappe:frappe /home/frappe
-
 echo "127.0.0.1 ${SITE_NAME}" | sudo tee -a /etc/hosts
+chown -R frappe:frappe ${BENCH}
 
 # Setup bench
-if [[ ! -d "${bench_home}/apps/frappe" ]]; then
-    cd /home/frappe && bench init frappe-bench --ignore-exist --skip-redis-config-generation 
-    cd ${bench_home} || exit 1
-    bench set-mariadb-host ${MARIADB_HOST}
+if [[ -z "$(ls -A "${BENCH}")" ]]; then
+    su-exec frappe bench init frappe-bench --ignore-exist --skip-redis-config-generation
 fi
 
+cd ${BENCH} || exit 1
 setup_config
 
 # Add a site if its not there (useful if you're doing multitenancy)
-if [[ ! -d "${bench_home}/sites/${SITE_NAME}" ]]; then
-    bench new-site "${SITE_NAME}"
+if [[ ! -d "${BENCH}/sites/${SITE_NAME}" ]]; then
+    su-exec frappe bench new-site "${SITE_NAME}"
 fi
 
-sudo chown -R frappe:frappe ${bench_home}
-cd ${bench_home} || exit 1
-
 # Start bench inplace of shell
-exec bench --site "${SITE_NAME}" serve
+su-exec frappe bench --site "${SITE_NAME}" serve

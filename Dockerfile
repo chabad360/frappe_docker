@@ -22,6 +22,12 @@ RUN curl https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-
   && rm node.deb \
   && npm install -g yarn
 
+# Install su-exec (like gosu, but a lot smaller)
+RUN curl -L https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz | tar xvz \ 
+  && cd su-exec-* && make \
+  && mv su-exec /usr/local/bin \
+  && cd .. && rm -rf su-exec-*
+
 # Add frappe user and setup sudo for it
 RUN useradd -ms /bin/bash -G sudo frappe \
   && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe \
@@ -50,10 +56,9 @@ ENV REDIS_CACHE_HOST="redis-cache"
 ENV REDIS_QUEUE_HOST="redis-queue"
 ENV REDIS_SOCKETIO_HOST="redis-socketio"
 ENV MARIADB_HOST="mariadb"
+ENV BENCH=/home/frappe/frappe-bench
 
 HEALTHCHECK --start-period=5m \
   CMD curl -f http://localhost:${WEBSERVER_PORT} || exit 1
-
-USER frappe
 
 ENTRYPOINT [ "/bin/entrypoint" ]
