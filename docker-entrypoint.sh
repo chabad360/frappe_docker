@@ -50,11 +50,12 @@ fi
 
 cd ${BENCH} || exit 1
 setup_config
+su-exec frappe bench set-mariadb-host "${MARIADB_HOST}"
 
 # Add a site if its not there (useful if you're doing multitenancy)
 if [[ ! -d "${BENCH}/sites/${SITE_NAME}" ]]; then
-     su-exec frappe bench new-site "${SITE_NAME}"
+     su-exec frappe bench new-site "${SITE_NAME}" --verbose
 fi
 
 # Start bench inplace of shell
-su-exec frappe bench --site "${SITE_NAME}" serve
+su-exec frappe bench --site "${SITE_NAME}" serve --verbose
