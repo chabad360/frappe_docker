@@ -58,4 +58,4 @@ if [[ ! -d "${BENCH}/sites/${SITE_NAME}" ]]; then
 fi
 
 # Start bench inplace of shell
-su-exec frappe bench --site "${SITE_NAME}" serve --verbose
+su-exec frappe supervisord & nginx
