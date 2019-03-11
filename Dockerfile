@@ -27,11 +27,11 @@ RUN useradd -ms /bin/bash -G sudo frappe \
 # Install bench
 RUN pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache
 
-USER frappe
 # Add some bench files
 COPY --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
-RUN sudo chown -R frappe:frappe /home/frappe/
+RUN chown -R frappe:frappe /home/frappe/
 
+USER frappe
 WORKDIR /home/frappe
 RUN bench init frappe-bench --ignore-exist --skip-redis-config-generation
 
