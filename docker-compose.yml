@@ -23,9 +23,6 @@ services:
     volumes:
       - ./conf/redis-conf.d:/etc/conf.d
 
-    ports:
-      - "13000:13000"
-
     command: ["redis-server","/etc/conf.d/redis_cache.conf"]
 
     container_name: redis-cache
@@ -34,8 +31,6 @@ services:
   redis-queue:
     image: redis:alpine
 
-    ports:
-      - "11000:11000"
 
     volumes:
       - ./conf/redis-conf.d:/etc/conf.d
@@ -51,9 +46,6 @@ services:
     volumes:
       - ./conf/redis-conf.d:/etc/conf.d
 
-    ports:
-      - "12000:12000"
-
     command: ["redis-server","/etc/conf.d/redis_socketio.conf"]
 
     container_name: redis-socketio
@@ -67,14 +59,11 @@ services:
       - ./conf/redis-conf.d/redis_cache.conf:/home/frappe/frappe-bench/config/redis_cache.conf
       - ./conf/redis-conf.d/redis_queue.conf:/home/frappe/frappe-bench/config/redis_queue.conf
       - ./conf/redis-conf.d/redis_socketio.conf:/home/frappe/frappe-bench/config/redis_socketio.conf
-      - ./conf/frappe-conf.d/nginx.conf:/etc/nginx/nginx.conf
-      - ./conf/frappe-conf.d/supervisord.conf:/etc/supervisor/supervisord.conf
     ports:
       - "8080:8080" # Webserver port
       - "9000:9000" # Socketio port
       - "6787:6787" # File Watcher port
-      - "80:80"     # Nginx port
-
+    
     stdin_open: true
     tty: true
     links:

@@ -8,8 +8,8 @@ ENV LANG C.UTF-8
 
 # Install all neccesary packages
 RUN apt-get update && apt-get install -y --no-install-suggests --no-install-recommends build-essential cron curl git iputils-ping libffi-dev \
-  liblcms2-dev libldap2-dev libmariadbclient-dev libsasl2-dev libssl-dev libtiff5-dev libwebp-dev mariadb-client nginx \
-  python-dev python-pip python-setuptools python-tk redis-tools rlwrap software-properties-common sudo supervisor tk8.6-dev \
+  liblcms2-dev libldap2-dev libmariadbclient-dev libsasl2-dev libssl-dev libtiff5-dev libwebp-dev mariadb-client \
+  python-dev python-pip python-setuptools python-tk redis-tools rlwrap software-properties-common sudo tk8.6-dev \
   vim xfonts-75dpi xfonts-base wget wkhtmltopdf \
   && apt-get clean && rm -rf /var/lib/apt/lists/* \
   && pip install --upgrade setuptools pip --no-cache \
@@ -53,6 +53,6 @@ ENV MARIADB_HOST="mariadb"
 ENV BENCH="/home/frappe/frappe-bench"
 
 HEALTHCHECK --start-period=5m \
-  CMD curl -f "http://localhost:80" || exit 1
+  CMD curl -f http://localhost:${WEBSERVER_PORT} || exit 1
 
 ENTRYPOINT [ "/bin/entrypoint" ]
