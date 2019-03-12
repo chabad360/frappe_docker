@@ -9,8 +9,11 @@ services:
       - MYSQL_USER=root
     
     volumes:
-      - ./conf/mariadb-conf.d:/etc/mysql/conf.d
       - /var/lib/mysql
+    
+    configs:
+      - source: mariadb
+        target: /etc/mysql/conf.d/my.cnf
     
     ports:
       - "3307:3306" # Mariadb port
@@ -100,3 +103,5 @@ configs:
     file: ./conf/redis-conf.d/redis_queue.conf
   redis-socketio:
     file: ./conf/redis-conf.d/redis_socketio.conf
+  mariadb:
+    file: ./conf/mariadb-conf.d/my.cnf
