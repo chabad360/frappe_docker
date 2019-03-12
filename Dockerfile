@@ -53,6 +53,6 @@ ENV MARIADB_HOST="mariadb"
 ENV BENCH="/home/frappe/frappe-bench"
 
 HEALTHCHECK --start-period=5m \
-  CMD curl -f http://localhost:${WEBSERVER_PORT} || exit 1
+  CMD curl -f http://localhost:${WEBSERVER_PORT} || echo "Curl failure: $?" && exit 1
 
 ENTRYPOINT [ "/bin/entrypoint" ]
