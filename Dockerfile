@@ -36,6 +36,9 @@ RUN pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache
 COPY ./docker-entrypoint.sh /bin/entrypoint
 RUN chmod 777 /bin/entrypoint
 
+COPY ./frappe-conf.d/nginx.conf /etc/nginx/nginx.conf
+COPY ./frappe-conf.d/supervisor.conf /etc/supervisor/supervisor.conf
+
 EXPOSE 8000 9000 6787
 
 VOLUME [ "/home/frappe/frappe-bench" ]
