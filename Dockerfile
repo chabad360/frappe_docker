@@ -3,11 +3,6 @@
 FROM debian:9.6-slim
 LABEL author=frappé
 
-# Add frappe user and setup sudo for it
-RUN useradd -ms /bin/bash -G sudo frappe \
-  && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe \
-  && mkdir /home/frappe/frappe-bench
-
 # Set locale C.UTF-8 for mariadb and general locale data
 ENV LANG C.UTF-8
 
@@ -27,6 +22,11 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   && cd su-exec-* && make \
   && mv su-exec /usr/local/bin \
   && cd .. && rm -rf su-exec-*
+
+# Add frappe user and setup sudo for it
+RUN useradd -ms /bin/bash -G sudo frappe \
+  && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe \
+  && mkdir /home/frappe/frappe-bench
 
 # Add entrypoint
 COPY ./docker-entrypoint.sh /bin/entrypoint
