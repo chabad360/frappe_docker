@@ -37,7 +37,7 @@ COPY ./docker-entrypoint.sh /bin/entrypoint
 RUN chmod 777 /bin/entrypoint
 
 COPY ./frappe-conf.d/nginx.conf /etc/nginx/nginx.conf
-COPY ./frappe-conf.d/supervisor.conf /etc/supervisor/supervisor.conf
+COPY ./frappe-conf.d/supervisord.conf /etc/supervisord.conf
 
 EXPOSE 8000 9000 6787
 
