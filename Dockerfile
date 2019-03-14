@@ -3,6 +3,11 @@
 FROM debian:9.6-slim
 LABEL author=frappé
 
+# Add frappe user and setup sudo for it
+RUN useradd -ms /bin/bash -G sudo frappe \
+  && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe \
+  && mkdir /home/frappe/frappe-bench
+
 # Set locale C.UTF-8 for mariadb and general locale data
 ENV LANG C.UTF-8
 
@@ -16,21 +21,12 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   && curl https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb > node.deb \
   && dpkg -i node.deb \
   && rm node.deb \
-  && npm install -g yarn
-
-# Install su-exec (like gosu, but a lot smaller)
-RUN curl -L https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz | tar xvz \ 
+  && npm install -g yarn \
+  && pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache \
+  && curl -L https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz | tar xvz \ 
   && cd su-exec-* && make \
   && mv su-exec /usr/local/bin \
   && cd .. && rm -rf su-exec-*
-
-# Add frappe user and setup sudo for it
-RUN useradd -ms /bin/bash -G sudo frappe \
-  && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe \
-  && mkdir /home/frappe/frappe-bench
-
-# Install bench
-RUN pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache
 
 # Add entrypoint
 COPY ./docker-entrypoint.sh /bin/entrypoint

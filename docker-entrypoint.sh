@@ -58,4 +58,4 @@ if [[ ! -d "${BENCH}/sites/${SITE_NAME}" ]]; then
 fi
 
 # Start bench inplace of shell
-su-exec frappe bench start --verbose
+su-exec frappe bench start
