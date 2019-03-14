@@ -8,6 +8,9 @@ RUN useradd -ms /bin/bash -G sudo frappe \
   && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe \
   && mkdir /home/frappe/frappe-bench
 
+# Copy over bench config templates
+COPY --chown=frappe:frappe ./frappe-templates /home/frappe/templates
+
 # Set locale C.UTF-8 for mariadb and general locale data
 ENV LANG C.UTF-8
 
@@ -26,7 +29,10 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   && curl -L https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz | tar xvz \ 
   && cd su-exec-* && make \
   && mv su-exec /usr/local/bin \
-  && cd .. && rm -rf su-exec-*
+  && cd .. && rm -rf su-exec-* \
+  && wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz \
+  && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz \
+  && rm dockerize-linux-amd64-v0.6.1.tar.gz
 
 # Add entrypoint
 COPY ./docker-entrypoint.sh /bin/entrypoint
