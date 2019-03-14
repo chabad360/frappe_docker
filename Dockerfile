@@ -3,14 +3,6 @@
 FROM debian:9.6-slim
 LABEL author=frappé
 
-# Add frappe user and setup sudo for it
-RUN useradd -ms /bin/bash -G sudo frappe \
-  && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe \
-  && mkdir /home/frappe/frappe-bench
-
-# Copy over bench config templates
-COPY --chown=frappe:frappe ./frappe-templates /home/frappe/templates
-
 # Set locale C.UTF-8 for mariadb and general locale data
 ENV LANG C.UTF-8
 
@@ -33,6 +25,11 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   && wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz \
   && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz \
   && rm dockerize-linux-amd64-v0.6.1.tar.gz
+
+# Add frappe user and setup sudo for it
+RUN useradd -ms /bin/bash -G sudo frappe \
+  && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe \
+  && mkdir /home/frappe/frappe-bench
 
 # Add entrypoint
 COPY ./docker-entrypoint.sh /bin/entrypoint
