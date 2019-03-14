@@ -10,11 +10,11 @@
     "redis_queue": "redis://{{ default .Env.REDIS_QUEUE_HOST "redis_queue" }}:11000",
     "redis_socketio": "redis://{{ default .Env.REDIS_SOCKETIO_HOST "redis_socketio" }}:12000",
     "restart_supervisor_on_update": false,
-    "root_password": {{ default .Env.MYSQL_ROOT_PASSWORD "root" }},
+    "root_password": "{{ default .Env.MYSQL_ROOT_PASSWORD "root" }}",
     "serve_default_site": true,
     "shallow_clone": true,
     "socketio_port": 9000,
     "update_bench_on_update": true,
     "webserver_port": {{ default .Env.WEBSERVER_PORT "8000" }},
-    "admin_password": {{ default .Env.ADMIN_PASSWORD "admin" }}
+    "admin_password": "{{ default .Env.ADMIN_PASSWORD "admin" }}"
 }
