@@ -57,5 +57,8 @@ if [[ ! -d "${BENCH}/sites/${SITE_NAME}" ]]; then
      su-exec frappe bench new-site "${SITE_NAME}" --verbose
 fi
 
-# Start bench inplace of shell
+# Start all services
 su-exec frappe supervisord & nginx
+
+# Wait for exit...
+su-exec frappe tail -f /dev/null
