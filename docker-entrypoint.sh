@@ -21,6 +21,8 @@ dockerize -wait "tcp://${REDIS_CACHE_HOST}:13000" -wait "tcp://${REDIS_QUEUE_HOS
 # Make sure MariaDB is up
 dockerize -wait "tcp://${MARIADB_HOST}:3306"
 
+mkdir /etc/nginx/conf.d
+
 dockerize -template /home/frappe/templates/nginx.tmpl:/etc/nginx/conf.d/frappe.conf -template /home/frappe/templates/supervisord.tmpl:/etc/supervisord/conf.d/frappe.conf
 
 
