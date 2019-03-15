@@ -20,7 +20,10 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   && curl -L https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz | tar xvz \ 
   && cd su-exec-* && make \
   && mv su-exec /usr/local/bin \
-  && cd .. && rm -rf su-exec-*
+  && cd .. && rm -rf su-exec-* \
+  && curl https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz \
+  && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz \
+  && rm dockerize-linux-amd64-v0.6.1.tar.gz
 
 # Add frappe user and setup sudo for it
 RUN useradd -ms /bin/bash -G sudo frappe \
@@ -30,6 +33,8 @@ RUN useradd -ms /bin/bash -G sudo frappe \
 # Add entrypoint
 COPY ./docker-entrypoint.sh /bin/entrypoint
 RUN chmod 777 /bin/entrypoint
+
+COPY --chown=frappe:frappe ./frappe-templates /home/frappe/templates
 
 EXPOSE 8000 9000 6787
 
