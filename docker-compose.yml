@@ -23,9 +23,6 @@ services:
     volumes:
       - ./conf/redis-conf.d:/etc/conf.d
 
-    ports:
-      - "13000:13000"
-
     command: ["redis-server","/etc/conf.d/redis_cache.conf"]
 
     container_name: redis-cache
@@ -34,8 +31,6 @@ services:
   redis-queue:
     image: redis:alpine
 
-    ports:
-      - "11000:11000"
 
     volumes:
       - ./conf/redis-conf.d:/etc/conf.d
@@ -50,9 +45,6 @@ services:
 
     volumes:
       - ./conf/redis-conf.d:/etc/conf.d
-
-    ports:
-      - "12000:12000"
 
     command: ["redis-server","/etc/conf.d/redis_socketio.conf"]
 
@@ -71,8 +63,7 @@ services:
       - "8080:8080" # Webserver port
       - "9000:9000" # Socketio port
       - "6787:6787" # File Watcher port
-      - "80:80"     # Nginx port
-
+    
     stdin_open: true
     tty: true
     links:
