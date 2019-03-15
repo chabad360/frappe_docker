@@ -21,6 +21,9 @@ dockerize -wait "tcp://${REDIS_CACHE_HOST}:13000" -wait "tcp://${REDIS_QUEUE_HOS
 # Make sure MariaDB is up
 dockerize -wait "tcp://${MARIADB_HOST}:3306"
 
+dockerize -template /home/frappe/templates/nginx.tmpl:/etc/nginx/conf.d/frappe.conf -template /home/frappe/templates/supervisord.tmpl:/etc/supervisord/conf.d/frappe.conf
+
+
 # Add a site if its not there (useful if you're doing multitenancy)
 if [[ ! -d "${BENCH}/sites/${SITE_NAME}" ]]; then
      su-exec frappe bench new-site "${SITE_NAME}" --verbose

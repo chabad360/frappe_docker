@@ -34,9 +34,6 @@ RUN useradd -ms /bin/bash -G sudo frappe \
 COPY ./docker-entrypoint.sh /bin/entrypoint
 RUN chmod 777 /bin/entrypoint
 
-COPY ./bench-conf/nginx.conf /etc/nginx/nginx.conf
-COPY ./bench-conf/supervisord.conf /etc/supervisord.conf
-
 COPY --chown=frappe:frappe ./frappe-templates /home/frappe/templates
 
 EXPOSE 8000 9000 6787 80
