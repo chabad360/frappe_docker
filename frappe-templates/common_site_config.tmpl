@@ -13,7 +13,7 @@
     "root_password": "{{ default .Env.MYSQL_ROOT_PASSWORD "root" }}",
     "serve_default_site": true,
     "shallow_clone": true,
-    "socketio_port": 9000,
+    "socketio_port": {{ default .Env.SOCKETIO_PORT "9000" }},
     "update_bench_on_update": true,
     "webserver_port": {{ default .Env.WEBSERVER_PORT "8000" }},
     "admin_password": "{{ default .Env.ADMIN_PASSWORD "admin" }}"

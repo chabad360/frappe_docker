@@ -2,7 +2,7 @@
 
 while ! [[ $i == 20 ]]
 do
-    output=$( curl "http://localhost:8080" )
+    output=$( curl "http://localhost:8000" )
     { echo "Exit status of curl: $?"
     } 1>&2
     sleep 2
