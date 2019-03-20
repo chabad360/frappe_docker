@@ -63,6 +63,7 @@ services:
 
   frappe:
     build: .
+    image: frappe
 
     volumes:
       - ./frappe-bench:/home/frappe/frappe-bench
