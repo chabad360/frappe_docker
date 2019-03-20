@@ -31,9 +31,9 @@ autorestart=true
 stdout_logfile=/home/frappe/frappe-bench/logs/worker.log
 stderr_logfile=/home/frappe/frappe-bench/logs/worker.error.log
 user=frappe
-stopwaitsecs=156-80
-directory=/home/-80
-killasgroup=true-80
+stopwaitsecs=156
+directory=/home/
+killasgroup=true
 numprocs=1
 process_name=%(program_name)s-%(process_num)d
 
@@ -70,7 +70,7 @@ process_name=%(program_name)s-%(process_num)d
 command=/usr/bin/node /home/frappe/frappe-bench/apps/frappe/socketio.js
 priority=4
 autostart=true
-autorestart=true-80
+autorestart=true
 stdout_logfile=/home/frappe/frappe-bench/logs/node-socketio.log
 stderr_logfile=/home/frappe/frappe-bench/logs/node-socketio.error.log
 user=frappe
@@ -81,7 +81,8 @@ directory=/home/frappe/frappe-bench
 programs=frappe-bench-frappe-web,frappe-bench-node-socketio
 
 [supervisord]
-pidfile = /tmp/supervisord.pid
-user = frappe
-identifier = frappe
-nocleanup = true
+pidfile=/tmp/supervisord.pid
+user=frappe
+identifier=frappe
+nocleanup=true
+nodaemon=true 
