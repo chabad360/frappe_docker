@@ -32,4 +32,5 @@ fi
 echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
 
 # Start all services
-su-exec frappe nginx & supervisord 
+nginx
+exec supervisord 
