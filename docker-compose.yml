@@ -63,6 +63,7 @@ services:
       - "8080:8080" # Webserver port
       - "9000:9000" # Socketio port
       - "6787:6787" # File Watcher port
+      - "80:80" # Nginx Port
     
     stdin_open: true
     tty: true

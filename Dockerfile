@@ -36,7 +36,7 @@ RUN chmod 777 /bin/entrypoint
 
 COPY --chown=frappe:frappe ./frappe-templates /home/frappe/templates
 
-EXPOSE 8000 9000 6787 80
+EXPOSE 80 6787 8000 9000
 
 VOLUME [ "/home/frappe/frappe-bench" ]
 
