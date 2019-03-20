@@ -28,15 +28,15 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
 # Add entrypoint
 COPY ./docker-entrypoint.sh /bin/entrypoint
 
-# Add templates
-COPY --chown=frappe:frappe ./frappe-templates /home/frappe/templates
-
 # Add frappe user and setup sudo for it
 RUN useradd -ms /bin/bash -G sudo frappe \
   && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe \
   && mkdir /home/frappe/frappe-bench \
   && chmod 777 /bin/entrypoint
 # ^^ Saves a layer
+
+# Add templates
+COPY --chown=frappe:frappe ./frappe-templates /home/frappe/templates
 
 EXPOSE 8000 9000 6787
 
