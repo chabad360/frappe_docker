@@ -25,16 +25,18 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz \
   && rm dockerize-linux-amd64-v0.6.1.tar.gz
 
+# Add entrypoint
+COPY ./docker-entrypoint.sh /bin/entrypoint
+
+# Add templates
+COPY --chown=frappe:frappe ./frappe-templates /home/frappe/templates
+
 # Add frappe user and setup sudo for it
 RUN useradd -ms /bin/bash -G sudo frappe \
   && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe \
-  && mkdir /home/frappe/frappe-bench
-
-# Add entrypoint
-COPY ./docker-entrypoint.sh /bin/entrypoint
-RUN chmod 777 /bin/entrypoint
-
-COPY --chown=frappe:frappe ./frappe-templates /home/frappe/templates
+  && mkdir /home/frappe/frappe-bench \
+  && chmod 777 /bin/entrypoint
+# ^^ Saves a layer
 
 EXPOSE 8000 9000 6787
 
