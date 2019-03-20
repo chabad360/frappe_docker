@@ -60,7 +60,7 @@ services:
       - ./conf/redis-conf.d/redis_queue.conf:/home/frappe/frappe-bench/config/redis_queue.conf
       - ./conf/redis-conf.d/redis_socketio.conf:/home/frappe/frappe-bench/config/redis_socketio.conf
     ports:
-      - "8080:8080" # Webserver port
+      - "8000:8000" # Webserver port
       - "9000:9000" # Socketio port
       - "6787:6787" # File Watcher port
     
@@ -81,7 +81,6 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=1234
       - ADMIN_PASSWORD=admini
-      - WEBSERVER_PORT=8080
       - SITE_NAME=site2.local
 
     container_name: frappe

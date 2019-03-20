@@ -40,9 +40,8 @@ EXPOSE 8000 9000 6787
 
 VOLUME [ "/home/frappe/frappe-bench" ]
 
-ENV MYSQL_ROOT_PASSWORD="123"
+ENV MYSQL_ROOT_PASSWORD="root"
 ENV ADMIN_PASSWORD="admin"
-ENV WEBSERVER_PORT="8000"
 ENV SITE_NAME="site1.local"
 
 # These are here because you never know, people may want to change them (for some odd reason), so we need to set defaults.
@@ -50,6 +49,7 @@ ENV REDIS_CACHE_HOST="redis-cache"
 ENV REDIS_QUEUE_HOST="redis-queue"
 ENV REDIS_SOCKETIO_HOST="redis-socketio"
 ENV MARIADB_HOST="mariadb"
+ENV WEBSERVER_PORT="8000"
 ENV BENCH="/home/frappe/frappe-bench"
 
 HEALTHCHECK --start-period=5m \
