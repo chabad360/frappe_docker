@@ -40,11 +40,17 @@ echo ""
 echo "Bench Common Site Config (${BENCH}/sites/common_site_config.json):"
 cat ${BENCH}/sites/common_site_config.json
 echo ""
-echo "Nginx config:"
-cat /etc/nginx/nginx.conf <(echo "") /etc/nginx/conf.d/frappe.conf
+echo "Nginx config (/etc/nginx/nginx.conf):"
+cat /etc/nginx/nginx.conf
+echo ""
+echo "Nginx frappe conf (/etc/nginx/conf.d/frappe.conf):"
+cat /etc/nginx/conf.d/frappe.conf
 echo ""
 echo "Supervisord config:"
-cat /etc/supervisord.conf <(echo "") /etc/supervisor/conf.d/frappe.conf
+cat /etc/supervisord.conf
+echo ""
+echo "Supervisord frappe conf (/etc/supervisor/conf.d/frappe.conf):"
+cat /etc/supervisor/conf.d/frappe.conf
 echo ""
 
 # Start all services
