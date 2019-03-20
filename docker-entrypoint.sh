@@ -26,7 +26,11 @@ if [[ ! -d "${BENCH}/sites/${SITE_NAME}" ]]; then
      su-exec frappe bench new-site "${SITE_NAME}" --verbose
 fi
 
+# Avoid hostname resolution issues (has happened before)
 echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
+
+# Make sure frappe is built
+su-exec frappe bench build
 
 # Print all configuration
 echo "Configuration:"
@@ -36,7 +40,12 @@ echo ""
 echo "Bench Common Site Config:"
 cat ${BENCH}/sites/common_site_config.json
 echo ""
+echo "Nginx config:"
+cat /etc/nginx/nginx.conf <(echo "") /etc/nginx/conf.d/frappe.conf
+echo ""
+echo "Supervisord config:"
+cat /etc/supervisord.conf <(echo "") /etc/supervisor/conf.d/frappe.conf
+echo ""
 
 # Start all services
-nginx
-exec supervisord 
+exec nginx & supervisord 
