@@ -10,9 +10,6 @@ if [[ ! -d "${BENCH}/sites" ]]; then
     dockerize -template /home/frappe/templates/procfile.tmpl:${BENCH}/Procfile -template /home/frappe/templates/common_site_config.tmpl:${BENCH}/sites/common_site_config.json
 fi
 
-cat <(echo "Bench Procfile:") ${BENCH}/Procfile <(echo)
-cat <(echo "Bench Common Site Config") ${BENCH}/sites/common_site_config.json <(echo)
-
 cd "${BENCH}" || exit 1
 su-exec frappe bench set-mariadb-host "${MARIADB_HOST}"
 
@@ -30,6 +27,15 @@ if [[ ! -d "${BENCH}/sites/${SITE_NAME}" ]]; then
 fi
 
 echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
+
+# Print all configuration
+echo "Configuration:"
+echo "Bench Procfile:"
+cat ${BENCH}/Procfile 
+echo ""
+echo "Bench Common Site Config:"
+cat ${BENCH}/sites/common_site_config.json
+echo ""
 
 # Start all services
 nginx

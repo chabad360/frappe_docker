@@ -52,6 +52,7 @@ ENV REDIS_QUEUE_HOST="redis-queue"
 ENV REDIS_SOCKETIO_HOST="redis-socketio"
 ENV MARIADB_HOST="mariadb"
 ENV WEBSERVER_PORT="8000"
+ENV SOCKETIO_PORT="9000"
 ENV BENCH="/home/frappe/frappe-bench"
 
 HEALTHCHECK --start-period=5m \
