@@ -26,10 +26,10 @@ install:
   - sleep 8m
 
 script:
-  - docker-compose ps | grep -i frappe | grep -i "Up|Healthy"
-  - docker-compose ps | grep -i redis-cache | grep -i "Up|Healthy"
-  - docker-compose ps | grep -i redis-queue | grep -i "Up|Healthy"
-  - docker-compose ps | grep -i redis-socketio  | grep -i "Up|Healthy"
-  - docker-compose ps | grep -i mariadb | grep -i "Up|Healthy"
+  - docker-compose ps | grep -i frappe
+  - docker-compose ps | grep -i redis-cache
+  - docker-compose ps | grep -i redis-queue
+  - docker-compose ps | grep -i redis-socketio
+  - docker-compose ps | grep -i mariadb
   - ./test.sh
   - ./dbench setup docker stop
