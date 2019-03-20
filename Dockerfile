@@ -25,33 +25,34 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz \
   && rm dockerize-linux-amd64-v0.6.1.tar.gz
 
+# Add entrypoint
+COPY ./docker-entrypoint.sh /bin/entrypoint
+
 # Add frappe user and setup sudo for it
 RUN useradd -ms /bin/bash -G sudo frappe \
   && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe \
-  && mkdir /home/frappe/frappe-bench
+  && mkdir /home/frappe/frappe-bench \
+  && chmod 777 /bin/entrypoint
+# ^^ Saves a layer
 
-# Add entrypoint
-COPY ./docker-entrypoint.sh /bin/entrypoint
-RUN chmod 777 /bin/entrypoint
-
+# Add templates
 COPY --chown=frappe:frappe ./frappe-templates /home/frappe/templates
 
 EXPOSE 80 6787 8000 9000
 
 VOLUME [ "/home/frappe/frappe-bench" ]
 
-ENV MYSQL_ROOT_PASSWORD "123"
-ENV ADMIN_PASSWORD "admin"
-ENV SITE_NAME "site1.local"
+ENV MYSQL_ROOT_PASSWORD="root"
+ENV ADMIN_PASSWORD="admin"
+ENV SITE_NAME="site1.local"
 
 # These are here because you never know, people may want to change them (for some odd reason), so we need to set defaults.
-ENV REDIS_CACHE_HOST "redis-cache"
-ENV REDIS_QUEUE_HOST "redis-queue"
-ENV REDIS_SOCKETIO_HOST "redis-socketio"
-ENV MARIADB_HOST "mariadb"
-ENV SOCKETIO_PORT "9000"
-ENV WEBSERVER_PORT "8000"
-ENV BENCH "/home/frappe/frappe-bench"
+ENV REDIS_CACHE_HOST="redis-cache"
+ENV REDIS_QUEUE_HOST="redis-queue"
+ENV REDIS_SOCKETIO_HOST="redis-socketio"
+ENV MARIADB_HOST="mariadb"
+ENV WEBSERVER_PORT="8000"
+ENV BENCH="/home/frappe/frappe-bench"
 
 HEALTHCHECK --start-period=5m \
   CMD curl -f http://localhost:${WEBSERVER_PORT} || echo "Curl failure: $?" && exit 1
