@@ -27,10 +27,10 @@ echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
 
 # Print all configuration
 echo "Configuration:"
-echo "Bench Procfile:"
+echo "Bench Procfile (${BENCH}/Procfile):"
 cat ${BENCH}/Procfile 
 echo ""
-echo "Bench Common Site Config:"
+echo "Bench Common Site Config (${BENCH}/sites/common_site_config.json):"
 cat ${BENCH}/sites/common_site_config.json
 echo ""
 
