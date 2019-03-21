@@ -56,6 +56,6 @@ ENV SOCKETIO_PORT="9000"
 ENV BENCH="/home/frappe/frappe-bench"
 
 HEALTHCHECK --start-period=5m \
-  CMD curl -f http://localhost:${WEBSERVER_PORT} || echo "Curl failure: $?" && exit 1
+  CMD curl -f http://localhost || echo "Curl failure: $?" && exit 1
 
 ENTRYPOINT [ "/bin/entrypoint" ]
