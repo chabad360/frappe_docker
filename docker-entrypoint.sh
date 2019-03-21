@@ -39,15 +39,15 @@ NC='\033[0m'
 echo -e "\n${BCYAN}Configuration:"
 echo -e "${BCYAN}Bench Procfile (${BENCH}/Procfile):${NC}"
 cat ${BENCH}/Procfile 
-echo -e "\n\n${BCYAN}Bench Common Site Config (${BENCH}/sites/common_site_config.json):${NC}"
+echo -e "\n${BCYAN}Bench Common Site Config (${BENCH}/sites/common_site_config.json):${NC}"
 cat ${BENCH}/sites/common_site_config.json
-echo -e "\n\n${BCYAN}Nginx config (/etc/nginx/nginx.conf):${NC}"
+echo -e "\n${BCYAN}Nginx config (/etc/nginx/nginx.conf):${NC}"
 cat /etc/nginx/nginx.conf
-echo -e "\n\n${BCYAN}Nginx frappe conf (/etc/nginx/conf.d/frappe.conf):${NC}"
+echo -e "\n${BCYAN}Nginx frappe conf (/etc/nginx/conf.d/frappe.conf):${NC}"
 cat /etc/nginx/conf.d/frappe.conf
-echo -e "\n\n${BCYAN}Supervisord config:${NC}"
+echo -e "\n${BCYAN}Supervisord config:${NC}"
 cat /etc/supervisor/supervisord.conf
-echo -e "\n\n${BCYAN}Supervisord frappe conf (/etc/supervisor/conf.d/frappe.conf):${NC}"
+echo -e "\n${BCYAN}Supervisord frappe conf (/etc/supervisor/conf.d/frappe.conf):${NC}"
 cat /etc/supervisor/conf.d/frappe.conf
 echo -e "\n"
 
