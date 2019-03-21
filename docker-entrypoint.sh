@@ -33,27 +33,23 @@ echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
 su-exec frappe bench build
 
 # Print all configuration
-BCYAN='033[1;36m'
+BCYAN='\033[1;36m'
+NC='\033[0m'
 
-echo -e "${BCYAN}Configuration:"
-echo -e "${BCYAN}Bench Procfile (${BENCH}/Procfile):"
+echo -e "\n${BCYAN}Configuration:"
+echo -e "${BCYAN}Bench Procfile (${BENCH}/Procfile):${NC}"
 cat ${BENCH}/Procfile 
-echo ""
-echo -e "${BCYAN}Bench Common Site Config (${BENCH}/sites/common_site_config.json):"
+echo -e "\n\n${BCYAN}Bench Common Site Config (${BENCH}/sites/common_site_config.json):${NC}"
 cat ${BENCH}/sites/common_site_config.json
-echo ""
-echo -e "${BCYAN}Nginx config (/etc/nginx/nginx.conf):"
+echo -e "\n\n${BCYAN}Nginx config (/etc/nginx/nginx.conf):${NC}"
 cat /etc/nginx/nginx.conf
-echo ""
-echo -e "${BCYAN}Nginx frappe conf (/etc/nginx/conf.d/frappe.conf):"
+echo -e "\n\n${BCYAN}Nginx frappe conf (/etc/nginx/conf.d/frappe.conf):${NC}"
 cat /etc/nginx/conf.d/frappe.conf
-echo ""
-echo -e "${BCYAN}Supervisord config:"
-cat /etc/supervisor.conf
-echo ""
-echo -e "${BCYAN}Supervisord frappe conf (/etc/supervisor/conf.d/frappe.conf):"
+echo -e "\n\n${BCYAN}Supervisord config:${NC}"
+cat /etc/supervisor/supervisord.conf
+echo -e "\n\n${BCYAN}Supervisord frappe conf (/etc/supervisor/conf.d/frappe.conf):${NC}"
 cat /etc/supervisor/conf.d/frappe.conf
-echo ""
+echo -e "\n"
 
 # Start all services
 exec nginx & supervisord 
