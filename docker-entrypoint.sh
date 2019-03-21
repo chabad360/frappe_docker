@@ -26,13 +26,14 @@ fi
 echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
 
 # Print all configuration
-BCYAN='033[1;36m'
+BCYAN='\033[1;36m'
+NC='\033[0m'
 
 echo -e "${BCYAN}Configuration:"
-echo -e "${BCYAN}Bench Procfile (${BENCH}/Procfile):"
+echo -e "${BCYAN}Bench Procfile (${BENCH}/Procfile):${NC}"
 cat ${BENCH}/Procfile 
 echo ""
-echo -e "${BCYAN}Bench Common Site Config (${BENCH}/sites/common_site_config.json):"
+echo -e "${BCYAN}Bench Common Site Config (${BENCH}/sites/common_site_config.json):${NC}"
 cat ${BENCH}/sites/common_site_config.json
 echo ""
 
