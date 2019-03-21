@@ -8,12 +8,9 @@ upstream frappe-bench-socketio-server {
 
 server {
 	listen 80;
-	server_name
-		{{ default .Env.SITE_NAME "site1.local" }}
-		;
+	server_name ~^.+$;
 
 	root /home/frappe/frappe-bench/sites;
-	
 
 	
 	add_header X-Frame-Options "SAMEORIGIN";
