@@ -49,7 +49,7 @@ echo -e "${BCYAN}Nginx frappe conf (/etc/nginx/conf.d/frappe.conf):"
 cat /etc/nginx/conf.d/frappe.conf
 echo ""
 echo -e "${BCYAN}Supervisord config:"
-cat /etc/supervisord.conf
+cat /etc/supervisor.conf
 echo ""
 echo -e "${BCYAN}Supervisord frappe conf (/etc/supervisor/conf.d/frappe.conf):"
 cat /etc/supervisor/conf.d/frappe.conf
