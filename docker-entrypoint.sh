@@ -48,7 +48,7 @@ output /etc/nginx/conf.d/frappe.conf "Nginx frappe conf" "/etc/nginx/conf.d/frap
 output /etc/supervisor/supervisord.conf "Supervisord config" "/etc/supervisor/supervisord.conf"
 output /etc/supervisor/conf.d/frappe.conf "Supervisord frappe conf" "/etc/supervisor/conf.d/frappe.conf"
 
-trap "killall \"nginx\" killall \"supervisord\"" HUP INT QUIT TERM
+trap "killall \"nginx\" && killall \"supervisord\"" HUP INT QUIT TERM
 
 # Start all services
 supervisord & sleep 5s
