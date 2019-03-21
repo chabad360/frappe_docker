@@ -49,7 +49,7 @@ output /etc/supervisor/supervisord.conf "Supervisord config" "/etc/supervisor/su
 output /etc/supervisor/conf.d/frappe.conf "Supervisord frappe conf" "/etc/supervisor/conf.d/frappe.conf"
 
 # Start all services
-supervisord
+supervisord & sleep 10s
 nginx  
 
 su-exec frappe tail -f /dev/null
