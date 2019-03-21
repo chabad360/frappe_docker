@@ -48,8 +48,17 @@ output /etc/nginx/conf.d/frappe.conf "Nginx frappe conf" "/etc/nginx/conf.d/frap
 output /etc/supervisor/supervisord.conf "Supervisord config" "/etc/supervisor/supervisord.conf"
 output /etc/supervisor/conf.d/frappe.conf "Supervisord frappe conf" "/etc/supervisor/conf.d/frappe.conf"
 
+trap "echo TRAPed signal" HUP INT QUIT TERM
+
 # Start all services
-supervisord & sleep 10s
+supervisord & sleep 5s
 nginx  
 
-su-exec frappe tail -f /dev/null
+echo "[hit enter key to exit] or run 'docker stop <container>'"
+read
+
+# stop service and clean up here
+killall "nginx"
+killall "supervisord"
+
+echo "exited $0"
