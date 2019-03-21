@@ -26,15 +26,14 @@ fi
 echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
 
 # Print all configuration
-BCYAN='\033[1;36m'
-NC='\033[0m'
+function output () {
+    TITLE=$2 NAME=$3 awk 'BEGIN{print "\033[1;36m" ENVIRON["TITLE"] ":\033[0m"} {print "\033[1;36m" ENVIRON["NAME"] " | \033[0m" $0} END{print ""}' $1
+}
 
 echo -e "\n${BCYAN}Configuration:"
-echo -e "${BCYAN}Bench Procfile (${BENCH}/Procfile):${NC}"
-cat ${BENCH}/Procfile 
-echo -e "\n\n${BCYAN}Bench Common Site Config (${BENCH}/sites/common_site_config.json):${NC}"
-cat ${BENCH}/sites/common_site_config.json
-echo -e "\n"
+output ./Procfile "Bench Procfile" "Procfile"
+output ${BENCH}/sites/common_site_config.json "Bench Common Site Config (${BENCH}/sites/common_site_config.json)" "common_site_config.json"
+
 
 # Start bench inplace of shell
 su-exec frappe bench start
