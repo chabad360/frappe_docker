@@ -27,7 +27,7 @@ echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
 
 # Print all configuration
 function output () {
-    TITLE=$2 NAME=$3 awk 'BEGIN{print "\033[1;36m" ENVIRON["TITLE"] ":\033[0m"} {print "\033[1;36m" ENVIRON["NAME"] " | \033[0m" $0} END{print ""}' $1
+    TITLE=$2 NAME=$3 awk 'BEGIN{print "\033[1;36m" ENVIRON["TITLE"] ":\033[0m"} {print "\033[1;31m" ENVIRON["NAME"] " | \033[0m" $0} END{print ""}' $1
 }
 
 echo -e "\n${BCYAN}Configuration:"
