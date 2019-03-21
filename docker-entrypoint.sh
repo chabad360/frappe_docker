@@ -42,16 +42,16 @@ echo ""
 echo -e "${BCYAN}Bench Common Site Config (${BENCH}/sites/common_site_config.json):"
 cat ${BENCH}/sites/common_site_config.json
 echo ""
-echo "Nginx config (/etc/nginx/nginx.conf):"
+echo -e "${BCYAN}Nginx config (/etc/nginx/nginx.conf):"
 cat /etc/nginx/nginx.conf
 echo ""
-echo "Nginx frappe conf (/etc/nginx/conf.d/frappe.conf):"
+echo -e "${BCYAN}Nginx frappe conf (/etc/nginx/conf.d/frappe.conf):"
 cat /etc/nginx/conf.d/frappe.conf
 echo ""
-echo "Supervisord config:"
+echo -e "${BCYAN}Supervisord config:"
 cat /etc/supervisord.conf
 echo ""
-echo "Supervisord frappe conf (/etc/supervisor/conf.d/frappe.conf):"
+echo -e "${BCYAN}Supervisord frappe conf (/etc/supervisor/conf.d/frappe.conf):"
 cat /etc/supervisor/conf.d/frappe.conf
 echo ""
 
