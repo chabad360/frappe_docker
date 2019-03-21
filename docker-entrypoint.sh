@@ -52,4 +52,6 @@ cat /etc/supervisor/conf.d/frappe.conf
 echo -e "\n"
 
 # Start all services
-exec nginx & supervisord 
+supervisord & nginx  
+
+su-exec frappe tail -f /dev/null
