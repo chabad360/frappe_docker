@@ -33,11 +33,13 @@ echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
 su-exec frappe bench build
 
 # Print all configuration
-echo "Configuration:"
-echo "Bench Procfile (${BENCH}/Procfile):"
+BCYAN='033[1;36m'
+
+echo -e "${BCYAN}Configuration:"
+echo -e "${BCYAN}Bench Procfile (${BENCH}/Procfile):"
 cat ${BENCH}/Procfile 
 echo ""
-echo "Bench Common Site Config (${BENCH}/sites/common_site_config.json):"
+echo -e "${BCYAN}Bench Common Site Config (${BENCH}/sites/common_site_config.json):"
 cat ${BENCH}/sites/common_site_config.json
 echo ""
 echo "Nginx config (/etc/nginx/nginx.conf):"
