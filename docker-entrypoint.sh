@@ -34,19 +34,19 @@ su-exec frappe bench build
 
 # Print all configuration
 function output () {
-    TITLE=$2 NAME=$3 awk 'BEGIN{print "\033[1;36m" ENVIRON["TITLE"] ":\n\033[0;31m" \
-    ENVIRON["NAME"] "\t|\033[1;31m ------------------------------------------------------------------------\033[0m"} \
+    TITLE=$2 NAME=${3:-$(echo "$1" | grep -o "[A-Z,a-z,0-9,\.,\ ,_,-,]*$")} awk 'BEGIN{print "\033[1;36m" ENVIRON["TITLE"] \
+    ":\n\033[0;31m" ENVIRON["NAME"] "\t|\033[1;31m ------------------------------------------------------------------------\033[0m"} \
     {print "\033[0;31m" ENVIRON["NAME"] "\t| \033[0m" $0} END{print "\033[0;31m" \
     ENVIRON["NAME"] "\t|\033[1;31m ------------------------------------------------------------------------\033[0m\n"}' $1
 }
 
 echo -e "\n\033[1;36mConfiguration:"
-output ./Procfile "Bench Procfile" "Procfile"
-output ${BENCH}/sites/common_site_config.json "Bench Common Site Config" "common_site_config.json"
-output /etc/nginx/nginx.conf "Nginx config" "nginx.conf"
-output /etc/nginx/conf.d/frappe.conf "Nginx frappe conf" "frappe.conf"
-output /etc/supervisor/supervisord.conf "Supervisord config" "/supervisord.conf"
-output /etc/supervisor/conf.d/frappe.conf "Supervisord frappe conf" "frappe.conf"
+output ./Procfile "Bench Procfile"
+output ${BENCH}/sites/common_site_config.json "Bench Common Site Config"
+output /etc/nginx/nginx.conf "Nginx config"
+output /etc/nginx/conf.d/frappe.conf "Nginx frappe conf"
+output /etc/supervisor/supervisord.conf "Supervisord config"
+output /etc/supervisor/conf.d/frappe.conf "Supervisord frappe conf"
 
 trap "killall \"nginx\" && killall \"supervisord\"" HUP INT QUIT TERM
 
