@@ -43,10 +43,10 @@ function output () {
 echo -e "\n\033[1;36mConfiguration:"
 output ./Procfile "Bench Procfile" "Procfile"
 output ${BENCH}/sites/common_site_config.json "Bench Common Site Config" "common_site_config.json"
-output /etc/nginx/nginx.conf "Nginx config" "/etc/nginx/nginx.conf"
-output /etc/nginx/conf.d/frappe.conf "Nginx frappe conf" "/etc/nginx/conf.d/frappe.conf"
-output /etc/supervisor/supervisord.conf "Supervisord config" "/etc/supervisor/supervisord.conf"
-output /etc/supervisor/conf.d/frappe.conf "Supervisord frappe conf" "/etc/supervisor/conf.d/frappe.conf"
+output /etc/nginx/nginx.conf "Nginx config" "nginx.conf"
+output /etc/nginx/conf.d/frappe.conf "Nginx frappe conf" "frappe.conf"
+output /etc/supervisor/supervisord.conf "Supervisord config" "/supervisord.conf"
+output /etc/supervisor/conf.d/frappe.conf "Supervisord frappe conf" "frappe.conf"
 
 trap "killall \"nginx\" && killall \"supervisord\"" HUP INT QUIT TERM
 
