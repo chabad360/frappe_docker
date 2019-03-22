@@ -27,7 +27,7 @@ echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
 
 # Print all configuration
 function output () {
-    TITLE=$2 NAME=${$3:-$(echo "1" | grep -o "[A-Z,a-z,0-9,\.,\ ,_,-,]*$")} awk 'BEGIN{print "\033[1;36m" ENVIRON["TITLE"] \
+    TITLE=$2 NAME=${3:-$(echo "$1" | grep -o "[A-Z,a-z,0-9,\.,\ ,_,-,]*$")} awk 'BEGIN{print "\033[1;36m" ENVIRON["TITLE"] \
     ":\n\033[0;31m" ENVIRON["NAME"] "\t|\033[1;31m ------------------------------------------------------------------------\033[0m"} \
     {print "\033[0;31m" ENVIRON["NAME"] "\t| \033[0m" $0} END{print "\033[0;31m" \
     ENVIRON["NAME"] "\t|\033[1;31m ------------------------------------------------------------------------\033[0m\n"}' $1
