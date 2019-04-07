@@ -4,7 +4,11 @@ FROM debian:9.6-slim
 LABEL author=frappé
 
 # Set locale C.UTF-8 for mariadb and general locale data
-# ENV LANG C.UTF-8
+ENV PYTHONIOENCODING=utf-8
+ENV LANGUAGE=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+RUN locale-gen en_US.UTF-8
 
 # Install all neccesary packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -16,23 +20,23 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && dpkg -i node.deb \
   && rm node.deb \
   && npm install -g yarn
-
+  
 # Add frappe user and setup sudo
-RUN useradd -ms /bin/bash -G sudo frappe \
-  && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe
+RUN groupadd -g 500 frappe \
+  && useradd -ms /bin/bash -u 500 -G 500 sudo frappe \
+  && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/frappe \
+  && chown -R 500:500 /home/frappe
 
 # Install bench
 RUN pip install -e git+https://github.com/frappe/bench.git@ae9cef3f547df8eece4ec460e48ddac9851a3979#egg=bench --no-cache-dir
 
-# Copy in bench folder
-COPY --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
-RUN chown -R frappe:frappe /home/frappe
-
 USER frappe
+
+# Add some bench files
+COPY --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
+
 WORKDIR /home/frappe/frappe-bench
 
-EXPOSE 8000
-EXPOSE 9000
-EXPOSE 6787
+EXPOSE 8000 9000 6787
 
 VOLUME [ "/home/frappe/frappe-bench" ]
