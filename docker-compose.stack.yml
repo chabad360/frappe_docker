@@ -5,7 +5,7 @@ services:
     image: mariadb
 
     environment:
-      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_ROOT_PASSWORD=root
       - MYSQL_USER=root
     
     volumes:
@@ -92,11 +92,6 @@ services:
 
     networks:
       - frappe
-
-    environment:
-      - MYSQL_ROOT_PASSWORD=1234
-      - ADMIN_PASSWORD=admini
-      - SITE_NAME=site2.local
           
 
 networks:
