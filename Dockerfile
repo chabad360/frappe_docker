@@ -19,8 +19,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && curl https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb > node.deb \
   && dpkg -i node.deb \
   && rm node.deb \
-  && npm install -g yarn
-  
+  && npm install -g yarn@1.15.2
+
 # Add frappe user and setup sudo
 RUN groupadd -g 500 frappe \
   && useradd -ms /bin/bash -u 500 -G 500 sudo frappe \
