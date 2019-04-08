@@ -2,6 +2,19 @@
 ; priority=1 --> Lower priorities indicate programs that start first and shut down last
 ; killasgroup=true --> send kill signal to child processes too
 
+[supervisord]
+nodaemon=true
+
+[program:frappe-bench-nginx]
+command=/usr/sbin/nginx -g "daemon off;"
+priority=900
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/stderr
+stderr_logfile_maxbytes=0
+username=frappe
+autorestart=true
+
 [program:frappe-bench-frappe-web]
 command=/home/frappe/frappe-bench/env/bin/gunicorn -b 127.0.0.1:{{ default .Env.WEBSERVER_PORT "8000" }} -w 4 -t 120 frappe.app:application --preload
 priority=4
@@ -78,7 +91,8 @@ directory=/home/frappe/frappe-bench
 
 
 [group:frappe-bench-web]
-programs=frappe-bench-frappe-web,frappe-bench-node-socketio
+programs=frappe-bench-frappe-web,frappe-bench-node-socketio,frappe-bench-nginx
 
-[supervisord]
-nodaemon=true 
+
+[group:frappe-bench-workers]
+programs=frappe-bench-frappe-schedule,frappe-bench-frappe-default-worker,frappe-bench-frappe-short-worker,frappe-bench-frappe-long-worker

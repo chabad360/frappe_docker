@@ -48,17 +48,15 @@ output /etc/nginx/conf.d/frappe.conf "Nginx frappe conf"
 output /etc/supervisor/supervisord.conf "Supervisord config"
 output /etc/supervisor/conf.d/frappe.conf "Supervisord frappe conf"
 
-trap "killall \"nginx\" && killall \"supervisord\"" HUP INT QUIT TERM
+trap "killall \"supervisord\"" HUP INT QUIT TERM
 
 # Start all services
-supervisord & sleep 5s
-nginx  
+supervisord
 
 echo "[hit enter key to exit] or run 'docker stop <container>'"
 read
 
 # stop service and clean up here
-killall "nginx"
 killall "supervisord"
 
 echo "exited $0"
