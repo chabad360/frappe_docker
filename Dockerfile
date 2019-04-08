@@ -15,6 +15,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   mariadb-client=10.1.37-0+deb9u1 python-dev=2.7.13-2 python-pip=9.0.1-2 python-setuptools=33.1.1-1 \
   sudo=1.8.19p1-2.1 vim=2:8.0.0197-4+deb9u1 wget=1.18-5+deb9u2 wkhtmltopdf=0.12.3.2-3 \
   && apt-get clean && rm -rf /var/lib/apt/lists/* \
+  && echo "LC_ALL=en_US.UTF-8" >> /etc/environment \
+  && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
+  && echo "LANG=en_US.UTF-8" > /etc/locale.conf \
   && locale-gen en_US.UTF-8 \
   && curl https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb > node.deb \
   && dpkg -i node.deb \
