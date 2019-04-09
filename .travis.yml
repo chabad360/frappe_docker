@@ -21,8 +21,7 @@ install:
   - chmod ugo+x ./dbench
   - chmod ugo+x ./stack-setup.sh
   - chmod ugo+x ./test.sh
-  - docker build . -t frappe
-  - ./stack-setup.sh
+  - ./travis-setup.sh
   - sleep 8m
 
 script:
