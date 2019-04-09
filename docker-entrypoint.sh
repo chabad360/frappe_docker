@@ -8,9 +8,6 @@ if [[ ! -d "${BENCH}/sites" ]]; then
     dockerize -template /home/frappe/templates/procfile.tmpl:${BENCH}/Procfile -template /home/frappe/templates/common_site_config.tmpl:${BENCH}/sites/common_site_config.json
 fi
 
-cat <(echo "Bench Procfile:") ${BENCH}/Procfile <(echo)
-cat <(echo "Bench Common Site Config") ${BENCH}/sites/common_site_config.json <(echo)
-
 cd "${BENCH}" || exit 1
 su-exec frappe bench set-mariadb-host "${MARIADB_HOST}"
 
@@ -25,6 +22,19 @@ if [[ ! -d "${BENCH}/sites/${SITE_NAME}" ]]; then
 fi
 
 echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
+
+# Print all configuration
+function output () {
+    TITLE=$2 NAME=${3:-$(echo "$1" | grep -o "[A-Z,a-z,0-9,\.,\ ,_,-,]*$")} awk 'BEGIN{print "\033[1;36m" ENVIRON["TITLE"] \
+    ":\n\033[0;31m" ENVIRON["NAME"] "\t|\033[1;31m ------------------------------------------------------------------------\033[0m"} \
+    {print "\033[0;31m" ENVIRON["NAME"] "\t| \033[0m" $0} END{print "\033[0;31m" \
+    ENVIRON["NAME"] "\t|\033[1;31m ------------------------------------------------------------------------\033[0m\n"}' $1
+}
+
+echo -e "\n\033[1;36mConfiguration:"
+output ./Procfile "Bench Procfile"
+output ${BENCH}/sites/common_site_config.json "Bench Common Site Config"
+
 
 # Start bench inplace of shell
 su-exec frappe bench start
