@@ -106,3 +106,6 @@ configs:
     file: ./conf/redis-conf.d/redis_socketio.conf
   mariadb:
     file: ./conf/mariadb-conf.d/my.cnf
+
+volumes:
+  frappe-bench:
