@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 chown -R frappe "${BENCH}"
 
 # Setup bench
