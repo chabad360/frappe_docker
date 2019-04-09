@@ -19,7 +19,7 @@ before_install:
 
 install:
   - chmod ugo+x ./dbench
-  - chmod ugo+x ./stack-setup.sh
+  - chmod ugo+x ./travis-setup.sh
   - chmod ugo+x ./test.sh
   - ./travis-setup.sh
   - sleep 8m
