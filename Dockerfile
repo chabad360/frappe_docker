@@ -19,12 +19,13 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
   && echo "LANG=en_US.UTF-8" > /etc/locale.conf \
   && locale-gen en_US.UTF-8 \
-  && wget https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb -O ./node.deb \
+  && wget https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb -O node.deb \
   && dpkg -i node.deb \
   && rm node.deb \
   && npm install -g yarn \
   && pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache \
-  && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O - | tar xvz \ 
+  && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O su-exec.tar.gz \
+  && tar xvz -C ./ -xzcf su-exec.tar.gz \
   && cd su-exec-* && make \
   && mv su-exec /usr/local/bin \
   && cd .. && rm -rf su-exec-* \
