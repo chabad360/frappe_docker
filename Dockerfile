@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   && npm install -g yarn \
   && pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache \
   && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O su-exec.tar.gz \
-  && tar -C ./ -xzcf su-exec.tar.gz \
+  && tar -C ./ -xzvf su-exec.tar.gz \
   && cd su-exec-* && make \
   && mv su-exec /usr/local/bin \
   && cd .. && rm -rf su-exec-* \
