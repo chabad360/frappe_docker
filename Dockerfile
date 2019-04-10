@@ -15,7 +15,6 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   mariadb-client nginx python-dev python-pip python-setuptools python-tk redis-tools rlwrap software-properties-common sudo \
   supervisor tk8.6-dev vim xfonts-75dpi xfonts-base wget wkhtmltopdf \
   && apt-get clean && rm -rf /var/lib/apt/lists/* \
-  && apt-get clean && rm -rf /var/lib/apt/lists/* \
   && echo "LC_ALL=en_US.UTF-8" >> /etc/environment \
   && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
   && echo "LANG=en_US.UTF-8" > /etc/locale.conf \
@@ -25,7 +24,8 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   && rm node.deb \
   && npm install -g yarn \
   && pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache \
-  && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O - | tar xvz \ 
+  && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O su-exec.tar.gz \
+  && tar -C ./ -xzvf su-exec.tar.gz \
   && cd su-exec-* && make \
   && mv su-exec /usr/local/bin \
   && cd .. && rm -rf su-exec-* \
@@ -40,7 +40,7 @@ COPY ./docker-entrypoint.sh /bin/entrypoint
 RUN groupadd -g 500 frappe \
   && useradd -ms /bin/bash -u 500 -g 500 -G sudo frappe \
   && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/frappe \
-  && chown -R 500:500 /home/frappe \
+  && chown -R 500:500 /home/frappe\
   && chmod 777 /bin/entrypoint
 # ^^ Saves a layer
 
