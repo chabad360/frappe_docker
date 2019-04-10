@@ -3,8 +3,11 @@
 FROM debian:9.6-slim
 LABEL author=frappé
 
-# Set locale C.UTF-8 for mariadb and general locale data
-ENV LANG C.UTF-8
+# Set locale en_us.UTF-8 for mariadb and general locale data
+ENV PYTHONIOENCODING=utf-8
+ENV LANGUAGE=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
 # Install all neccesary packages
 RUN apt-get update && apt-get install -y --no-install-suggests --no-install-recommends build-essential cron curl git iputils-ping libffi-dev \
@@ -12,7 +15,12 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   python-dev python-pip python-setuptools python-tk redis-tools rlwrap software-properties-common sudo tk8.6-dev \
   vim xfonts-75dpi xfonts-base wget wkhtmltopdf supervisor nginx \
   && apt-get clean && rm -rf /var/lib/apt/lists/* \
-  && wget https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb -O ./node.deb \
+  && apt-get clean && rm -rf /var/lib/apt/lists/* \
+  && echo "LC_ALL=en_US.UTF-8" >> /etc/environment \
+  && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
+  && echo "LANG=en_US.UTF-8" > /etc/locale.conf \
+  && locale-gen en_US.UTF-8 \
+  && wget https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb -O node.deb \
   && dpkg -i node.deb \
   && rm node.deb \
   && npm install -g yarn \
@@ -28,10 +36,11 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
 # Add entrypoint
 COPY ./docker-entrypoint.sh /bin/entrypoint
 
-# Add frappe user and setup sudo for it
-RUN useradd -ms /bin/bash -G sudo frappe \
-  && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/frappe \
-  && mkdir /home/frappe/frappe-bench \
+# Add frappe user and setup sudo
+RUN groupadd -g 500 frappe \
+  && useradd -ms /bin/bash -u 500 -g 500 -G sudo frappe \
+  && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/frappe \
+  && chown -R 500:500 /home/frappe \
   && chmod 777 /bin/entrypoint
 # ^^ Saves a layer
 
