@@ -39,11 +39,10 @@ WORKDIR /home/frappe
 
 RUN git clone https://github.com/frappe/bench.git frappe-bench \
   && pip install -e frappe-bench \
-  && chown -R frappe:frappe /home/frappe
+  && chown -R frappe:frappe /home/frappe \
+  && su-exec frappe bench init /home/frappe/frappe-bench --ignore-exist --skip-redis-config-generation
 
 USER frappe
-
-RUN bench init /home/frappe/frappe-bench --ignore-exist --skip-redis-config-generation
 
 # Add some bench files
 COPY --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
