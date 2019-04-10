@@ -35,8 +35,10 @@ RUN groupadd -g 500 frappe \
   && chown -R 500:500 /home/frappe
 
 # Install bench
-RUN git clone https://github.com/frappe/bench.git /home/frappe/frappe-bench \
-  && pip install -e /home/frappe/frappe-bench \
+WORKDIR /home/frappe
+
+RUN git clone https://github.com/frappe/bench.git frappe-bench \
+  && pip install -e frappe-bench \
   && chown -R frappe:frappe /home/frappe
 
 USER frappe
