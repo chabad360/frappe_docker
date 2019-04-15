@@ -7,8 +7,13 @@ if [[ ! -d "${BENCH}/sites" ]]; then
     su-exec frappe bench init "${BENCH}" --ignore-exist --skip-redis-config-generation --verbose
 fi
 
-# Add bench config files
-dockerize -template /home/frappe/templates/procfile.tmpl:${BENCH}/Procfile -template /home/frappe/templates/common_site_config.tmpl:${BENCH}/sites/common_site_config.json
+# Safely add bench config files
+if [[ ! -f "${BENCH}/Procfile" ]]; then
+    dockerize -template /home/frappe/templates/procfile.tmpl:${BENCH}/Procfile 
+fi
+if [[ ! -f "${BENCH}/sites/common_site_config.json" ]]; then
+    dockerize -template /home/frappe/templates/common_site_config.tmpl:${BENCH}/sites/common_site_config.json
+fi
 
 cd "${BENCH}" || exit 1
 su-exec frappe bench set-mariadb-host "${MARIADB_HOST}"
@@ -31,7 +36,7 @@ function output () {
     ":\n\033[0;31m" ENVIRON["NAME"] "\t|\033[1;31m ------------------------------------------------------------------------\033[0m"} \
     {print "\033[0;31m" ENVIRON["NAME"] "\t| \033[0m" $0} END{print "\033[0;31m" \
     ENVIRON["NAME"] "\t|\033[1;31m ------------------------------------------------------------------------\033[0m\n"}' $1
-}
+};\
 
 echo -e "\n\033[1;36mConfiguration:"
 output ./Procfile "Bench Procfile"
