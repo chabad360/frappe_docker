@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   python-dev python-pip python-setuptools python-tk redis-tools rlwrap software-properties-common sudo tk8.6-dev \
   vim xfonts-75dpi xfonts-base wget wkhtmltopdf \
   && apt-get clean && rm -rf /var/lib/apt/lists/* \
-  && wget https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb -O ./node.deb \
+  && wget https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_armhf.deb -O ./node.deb \
   && dpkg -i node.deb \
   && rm node.deb \
   && npm install -g yarn \
@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   && cd su-exec-* && make \
   && mv su-exec /usr/local/bin \
   && cd .. && rm -rf su-exec-* \
-  && wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz \
+  && wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-armhf-v0.6.1.tar.gz \
   && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz \
   && rm dockerize-linux-amd64-v0.6.1.tar.gz
 
