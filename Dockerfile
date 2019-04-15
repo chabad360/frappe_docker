@@ -1,7 +1,9 @@
 # Frappe Bench Dockerfile
 
-FROM arm32v7/debian:9.6-slim
+FROM balenalib/generic-armv7ahf-debian:stretch
 LABEL author=frappé
+
+RUN [ "cross-build-start" ]
 
 # Set locale C.UTF-8 for mariadb and general locale data
 ENV LANG C.UTF-8
@@ -57,5 +59,7 @@ ENV BENCH="/home/frappe/frappe-bench"
 
 HEALTHCHECK --start-period=5m \
   CMD curl -f http://localhost:${WEBSERVER_PORT} || echo "Curl failure: $?" && exit 1
+
+RUN [ "cross-build-end" ]
 
 ENTRYPOINT [ "/bin/entrypoint" ]
