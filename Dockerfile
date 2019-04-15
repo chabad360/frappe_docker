@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   && mv su-exec /usr/local/bin \
   && cd .. && rm -rf su-exec-* \
   && wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-armhf-v0.6.1.tar.gz \
-  && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz \
+  && tar -C /usr/local/bin -xzvf dockerize-linux-armhf-v0.6.1.tar.gz \
   && rm dockerize-linux-amd64-v0.6.1.tar.gz
 
 # Add entrypoint
