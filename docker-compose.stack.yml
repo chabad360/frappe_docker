@@ -5,12 +5,14 @@ services:
     image: chabad360/mariadb-armhf
 
     environment:
-      - MYSQL_ROOT_PASSWORD=123
-      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=root
     
     volumes:
-      - ./conf/mariadb-conf.d:/etc/mysql/conf.d
       - /var/lib/mysql
+    
+    configs:
+      - source: mariadb
+        target: /etc/mysql/conf.d/my.cnf
     
     ports:
       - "3307:3306" # Mariadb port
@@ -59,10 +61,10 @@ services:
 
 
   frappe:
-    build: .
+    image: frappe
 
     volumes:
-      - ./frappe-bench:/home/frappe/frappe-bench
+      - frappe-bench:/home/frappe/frappe-bench
 
     ports:
       - "8000:8000" # Webserver port
@@ -100,3 +102,8 @@ configs:
     file: ./conf/redis-conf.d/redis_queue.conf
   redis-socketio:
     file: ./conf/redis-conf.d/redis_socketio.conf
+  mariadb:
+    file: ./conf/mariadb-conf.d/my.cnf
+
+volumes:
+  frappe-bench:

@@ -1,8 +1,8 @@
-language: python
-python:
-  - "2.7"
+dist: xenial
+
 env:
-  - DOCKER_COMPOSE_VERSION: 1.23.1
+  - DOCKER_COMPOSE_VERSION=1.23.1
+  - DOCKER_COMPOSE_VERSION=1.23.1 STACK=1
 
 services:
   - docker
@@ -20,16 +20,10 @@ before_install:
 install:
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
   - chmod ugo+x ./dbench
-  - chmod ugo+x ./stack-setup.sh
-  - ./dbench setup docker
-  - ./stack-setup.sh
-  - ./dbench init frappe-bench
-  - ./dbench new-site site1.local
-  - ./dbench setup hosts
-  - pip install --upgrade virtualenv
-  - virtualenv -p python3 testenv
-  - source testenv/bin/activate
-  - pip install requests
+  - chmod ugo+x ./travis-setup.sh
+  - chmod ugo+x ./test.sh
+  - ./travis-setup.sh
+  - sleep 8m
 
 script:
   - docker-compose ps | grep -i frappe
@@ -37,5 +31,5 @@ script:
   - docker-compose ps | grep -i redis-queue
   - docker-compose ps | grep -i redis-socketio
   - docker-compose ps | grep -i mariadb
-  - python test.py
-  - docker-compose stop
+  - ./test.sh
+  - ./dbench setup docker stop

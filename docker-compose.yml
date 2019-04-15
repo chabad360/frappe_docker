@@ -5,15 +5,14 @@ services:
     image: apcheamitru/arm32v6-mariadb
 
     environment:
-      - MYSQL_ROOT_PASSWORD=123
-      - MYSQL_USER=root
-    
+      - MYSQL_ROOT_PASSWORD=1234
+
     volumes:
       - ./conf/mariadb-conf.d:/etc/mysql/conf.d
       - /var/lib/mysql
-    
+
     ports:
-      - "3307:3306" #mariadb-port
+      - "3307:3306" # MariaDB Port
     
     container_name: mariadb
 
@@ -60,7 +59,6 @@ services:
       - ./conf/redis-conf.d/redis_cache.conf:/home/frappe/frappe-bench/config/redis_cache.conf
       - ./conf/redis-conf.d/redis_queue.conf:/home/frappe/frappe-bench/config/redis_queue.conf
       - ./conf/redis-conf.d/redis_socketio.conf:/home/frappe/frappe-bench/config/redis_socketio.conf
-    build: .
     ports:
       - "8000:8000" # Webserver port
       - "9000:9000" # Socketio port
@@ -68,17 +66,21 @@ services:
     
     stdin_open: true
     tty: true
-    
     links:
-      - mariadb
       - redis-cache
       - redis-queue
       - redis-socketio
+      - mariadb
 
     depends_on:
       - mariadb
       - redis-cache
       - redis-queue
       - redis-socketio
-    
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - ADMIN_PASSWORD=admini
+      - SITE_NAME=site2.local
+
     container_name: frappe
