@@ -24,14 +24,11 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   && rm node.deb \
   && npm install -g yarn \
   && pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache \
-  && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O su-exec.tar.gz \
-  && tar -C ./ -xzvf su-exec.tar.gz \
+  && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O - | tar xzv \
   && cd su-exec-* && make \
   && mv su-exec /usr/local/bin \
   && cd .. && rm -rf su-exec-* \
-  && wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz \
-  && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz \
-  && rm dockerize-linux-amd64-v0.6.1.tar.gz
+  && wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz -O - | tar xzv -C /usr/local/bin
 
 # Add entrypoint
 COPY ./docker-entrypoint.sh /bin/entrypoint
