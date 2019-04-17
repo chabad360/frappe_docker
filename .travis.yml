@@ -20,7 +20,7 @@ install:
   - chmod ugo+x ./dbench
   - chmod ugo+x ./test.sh
   - docker-compose up &
-  - sleep 8m
+  - sleep 9m
 
 script:
   - docker-compose ps | grep -i frappe
