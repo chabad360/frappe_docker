@@ -1,6 +1,7 @@
 # Frappe on Docker
 
 [![Build Status](https://travis-ci.org/frappe/frappe_docker.svg?branch=develop)](https://travis-ci.org/frappe/frappe_docker)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fchabad360%2Ffrappe_docker.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fchabad360%2Ffrappe_docker?ref=badge_shield)
 
 This is a repo designed to aide setting up frappe/ERPNext on docker.
 
@@ -71,3 +72,6 @@ Feel free to contribute to this project and make it better.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fchabad360%2Ffrappe_docker.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fchabad360%2Ffrappe_docker?ref=badge_large)
