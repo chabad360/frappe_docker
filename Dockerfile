@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y --no-install-suggests --no-install-reco
   && dpkg -i node.deb \
   && rm node.deb \
   && npm install -g yarn \
-  && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O - | tar xvz \ 
+  && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O - | tar xvz \
   && cd su-exec-* && make \
   && mv su-exec /usr/local/bin \
   && cd .. && rm -rf su-exec-*
@@ -51,4 +51,4 @@ WORKDIR /home/frappe/frappe-bench
 
 EXPOSE 8000 9000 6787
 
-VOLUME [ "/home/frappe/frappe-bench" ]
+VOLUME [ "/home/frappe/frappe-bench/sites" ]
