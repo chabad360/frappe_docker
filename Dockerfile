@@ -39,7 +39,6 @@ WORKDIR /home/frappe
 
 RUN git clone https://github.com/frappe/bench.git \
   && pip install -e bench \
-  && pip install wheel
   && chown -R frappe:frappe /home/frappe \
   && su-exec frappe bench init /home/frappe/frappe-bench --ignore-exist --skip-redis-config-generation
 
