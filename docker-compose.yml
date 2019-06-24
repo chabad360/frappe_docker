@@ -16,6 +16,7 @@ services:
     
     container_name: mariadb
 
+
   redis-cache:
     image: redis:alpine
 
@@ -25,6 +26,7 @@ services:
     command: ["redis-server","/etc/conf.d/redis_cache.conf"]
 
     container_name: redis-cache
+
 
   redis-queue:
     image: redis:alpine
@@ -36,6 +38,7 @@ services:
     command: ["redis-server","/etc/conf.d/redis_queue.conf"]
 
     container_name: redis-queue
+
 
   redis-socketio:
     image: redis:alpine
@@ -52,7 +55,7 @@ services:
     build: .
 
     volumes:
-      - ./frappe-bench:/home/frappe/frappe-bench
+      - frappe-bench-sites:/home/frappe/frappe-bench/sites
       - ./conf/redis-conf.d/redis_cache.conf:/home/frappe/frappe-bench/config/redis_cache.conf
       - ./conf/redis-conf.d/redis_queue.conf:/home/frappe/frappe-bench/config/redis_queue.conf
       - ./conf/redis-conf.d/redis_socketio.conf:/home/frappe/frappe-bench/config/redis_socketio.conf
@@ -66,15 +69,17 @@ services:
     tty: true
 
     links:
+      - mariadb
       - redis-cache
       - redis-queue
       - redis-socketio
-      - mariadb
 
     depends_on:
       - mariadb
       - redis-cache
       - redis-queue
       - redis-socketio
-
     container_name: frappe
+
+volumes:
+  frappe-bench-sites:
