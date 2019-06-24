@@ -42,7 +42,7 @@ RUN pip install -e git+https://github.com/frappe/bench.git@ae9cef3f547df8eece4ec
 
 USER frappe
 
-RUN bench init /home/frappe/frappe-bench --verbose --skip-redis-config-generation
+RUN bench init /home/frappe/frappe-bench --verbose --skip-redis-config-generation --frappe-branch=v11.1.36
 
 # Add some bench files
 COPY --chown=500:500 ./frappe-bench /home/frappe/frappe-bench
