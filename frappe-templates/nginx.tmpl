@@ -10,13 +10,13 @@ server {
 	listen 80;
 	server_name ~^.+$;
 
-	root /home/frappe/frappe-bench/sites;
+	root {{ default .Env.BENCH "/home/frappe/frappe-bench" }}/sites;
 
 	
 	add_header X-Frame-Options "SAMEORIGIN";
 
 	location /assets {
-		alias /home/frappe/frappe-bench/sites/assets/;
+		alias {{ default .Env.BENCH "/home/frappe/frappe-bench" }}h/sites/assets/;
 		try_files $uri =404;
 	}
 
