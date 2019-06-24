@@ -22,11 +22,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && wget https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb -O node.deb \
   && dpkg -i node.deb \
   && rm node.deb \
-  && npm install -g yarn@1.15.2\
-  && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O - | tar xvz \
-  && cd su-exec-* && make \
-  && mv su-exec /usr/local/bin \
-  && cd .. && rm -rf su-exec-*
+  && npm install -g yarn@1.15.2 
+#  && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O - | tar xvz \
+#  && cd su-exec-* && make \
+#  && mv su-exec /usr/local/bin \
+#  && cd .. && rm -rf su-exec-*
 
 # Add frappe user and setup sudo
 RUN groupadd -g 500 frappe \
