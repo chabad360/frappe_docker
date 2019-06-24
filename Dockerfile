@@ -37,15 +37,15 @@ RUN groupadd -g 500 frappe \
 # Install bench
 WORKDIR /home/frappe
 
-RUN pip install -e git+https://github.com/frappe/bench.git#egg=bench
+RUN pip install -e git+https://github.com/frappe/bench.git#egg=bench \
+  && chown -R 500:500 /home/frappe
 
 USER frappe
 
-RUN sudo chown -R frappe:frappe /home/frappe \
-  && bench init /home/frappe/frappe-bench --ignore-exist --skip-redis-config-generation
+RUN bench init /home/frappe/frappe-bench --verbose --skip-redis-config-generation
 
 # Add some bench files
-COPY --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
+COPY --chown=500:500 ./frappe-bench /home/frappe/frappe-bench
 
 WORKDIR /home/frappe/frappe-bench
 
