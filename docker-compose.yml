@@ -80,3 +80,6 @@ services:
       - redis-queue
       - redis-socketio
     container_name: frappe
+
+volumes:
+  frappe-bench-sites:
