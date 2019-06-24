@@ -38,11 +38,12 @@ RUN groupadd -g 500 frappe \
 WORKDIR /home/frappe
 
 RUN git clone https://github.com/frappe/bench.git \
-  && pip install -e bench \
-  && chown -R frappe:frappe /home/frappe \
-  && su-exec frappe bench init /home/frappe/frappe-bench --ignore-exist --skip-redis-config-generation
+  && pip install -e bench
 
 USER frappe
+
+RUN chown -R frappe:frappe /home/frappe \
+  && bench init /home/frappe/frappe-bench --ignore-exist --skip-redis-config-generation
 
 # Add some bench files
 COPY --chown=frappe:frappe ./frappe-bench /home/frappe/frappe-bench
