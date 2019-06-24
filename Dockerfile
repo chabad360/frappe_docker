@@ -37,7 +37,7 @@ RUN groupadd -g 500 frappe \
 # Install bench
 WORKDIR /home/frappe
 
-RUN pip install -e git+https://github.com/frappe/bench.git
+RUN pip install -e git+https://github.com/frappe/bench.git#egg=bench
 
 USER frappe
 
