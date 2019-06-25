@@ -10,10 +10,10 @@ ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
 # Install all neccesary packages
-RUN apt-get update && apt-get install -y --no-install-suggests --no-install-recommends build-essential cron curl git locales \
-  libffi-dev liblcms2-dev libldap2-dev libmariadbclient-dev libsasl2-dev libssl-dev libtiff5-dev libwebp-dev mariadb-client \
-  iputils-ping python-dev python-pip python-setuptools python-tk redis-tools rlwrap software-properties-common sudo tk8.6-dev \
-  vim xfonts-75dpi xfonts-base wget wkhtmltopdf \
+RUN apt-get update && apt-get install -y --no-install-suggests --no-install-recommends build-essential cron curl git \
+  iputils-ping libffi-dev liblcms2-dev libldap2-dev libmariadbclient-dev libsasl2-dev libssl-dev libtiff5-dev libwebp-dev locales \
+  mariadb-client nginx python-dev python-pip python-setuptools python-tk redis-tools rlwrap software-properties-common sudo \
+  supervisor tk8.6-dev vim xfonts-75dpi xfonts-base wget wkhtmltopdf \
   && apt-get clean && rm -rf /var/lib/apt/lists/* \
   && echo "LC_ALL=en_US.UTF-8" >> /etc/environment \
   && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
@@ -43,7 +43,7 @@ RUN groupadd -g 500 frappe \
 # Add templates
 COPY --chown=frappe:frappe ./frappe-templates /home/frappe/templates
 
-EXPOSE 8000 9000 6787
+EXPOSE 80 6787 8000 9000
 
 VOLUME [ "/home/frappe/frappe-bench" ]
 
@@ -59,8 +59,9 @@ ENV MARIADB_HOST="mariadb"
 ENV WEBSERVER_PORT="8000"
 ENV SOCKETIO_PORT="9000"
 ENV BENCH="/home/frappe/frappe-bench"
+ENV DEV_MODE="false"
 
 HEALTHCHECK --start-period=5m \
-  CMD curl -f http://localhost:${WEBSERVER_PORT} || echo "Curl failure: $?" && exit 1
+  CMD curl -f http://localhost || echo "Curl failure: $?" && exit 1
 
 ENTRYPOINT [ "/bin/entrypoint" ]
