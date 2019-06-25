@@ -1,5 +1,11 @@
 #!/bin/bash
 
+docker container ls | grep frappe
+docker container ls | grep mariadb
+docker container ls | grep redis-cache
+docker container ls | grep redis-queue
+docker container ls | grep redis-socketio
+
 while ! [[ $i == 20 ]]
 do
     output=$( curl "http://localhost" )
