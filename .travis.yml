@@ -25,9 +25,5 @@ install:
   - sleep 8m
 
 script:
-  - docker container ls | grep -i frappe
-  - docker container ls | grep -i redis-cache
-  - docker container ls | grep -i redis-queue
-  - docker container ls | grep -i redis-socketio
-  - docker container ls | grep -i mariadb
   - ./test.sh
+  - ./dbench setup docker down
