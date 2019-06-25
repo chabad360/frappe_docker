@@ -63,7 +63,7 @@ ENV MARIADB_HOST="mariadb"
 ENV WEBSERVER_PORT="8000"
 ENV SOCKETIO_PORT="9000"
 ENV BENCH="/home/frappe/frappe-bench"
-ENV MODE="normal"
+ENV DEV_MODE="false"
 
 HEALTHCHECK --start-period=5m \
   CMD curl -f http://localhost || echo "Curl failure: $?" && exit 1
