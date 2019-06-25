@@ -17,5 +17,5 @@
     "update_bench_on_update": true,
     "webserver_port": {{ default .Env.WEBSERVER_PORT "8000" }},
     "admin_password": "{{ default .Env.ADMIN_PASSWORD "admin" }}",
-    "developer_mode": {{ default {{ replace .Env.DEV_MODE "true" "1" 1 }} "0" }}
+    "developer_mode": {{ default ( replace .Env.DEV_MODE "true" "1" 1 ) "0" }}
 }
