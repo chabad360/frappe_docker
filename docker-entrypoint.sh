@@ -1,6 +1,6 @@
 #!/bin/bash
 
-chown -R frappe "${BENCH}"
+chown -R 500:500 "${BENCH}"
 
 # Setup bench
 if [[ ! -d "${BENCH}/sites" ]]; then
@@ -41,7 +41,7 @@ function output () {
 }
 
 echo -e "\n\033[1;36mConfiguration:"
-output ./Procfile "Bench Procfile"
+output ${BENCH}/Procfile "Bench Procfile"
 output ${BENCH}/sites/common_site_config.json "Bench Common Site Config"
 output /etc/nginx/nginx.conf "Nginx config"
 output /etc/nginx/conf.d/frappe.conf "Nginx frappe conf"

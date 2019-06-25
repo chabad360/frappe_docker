@@ -102,7 +102,7 @@ directory={{ default .Env.BENCH "/home/frappe/frappe-bench" }}
 
 
 [group:frappe-bench-web]
-programs=frappe-bench-frappe-web,frappe-bench-node-socketio,frappe-bench-nginx{{ if (contains .ENV.MODE "dev" ) ",frappe-bench-watch" }}
+programs=frappe-bench-frappe-web,frappe-bench-node-socketio,frappe-bench-nginx{{ if ( contains .ENV.MODE "dev" ) "\,frappe-bench-watch" }}
 
 
 [group:frappe-bench-workers]
