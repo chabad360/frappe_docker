@@ -16,7 +16,7 @@ server {
 	add_header X-Frame-Options "SAMEORIGIN";
 
 	location /assets {
-		alias {{ default .Env.BENCH "/home/frappe/frappe-bench" }}h/sites/assets/;
+		alias {{ default .Env.BENCH "/home/frappe/frappe-bench" }}/sites/assets/;
 		try_files $uri =404;
 	}
 
