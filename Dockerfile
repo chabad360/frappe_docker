@@ -62,6 +62,6 @@ ENV BENCH="/home/frappe/frappe-bench"
 ENV DEV_MODE="false"
 
 HEALTHCHECK --start-period=5m \
-  CMD curl -f http://localhost || echo "Curl failure: $?" && exit 1
+  CMD curl --fail http://localhost || exit 1
 
 ENTRYPOINT [ "/bin/entrypoint" ]
