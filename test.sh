@@ -1,8 +1,14 @@
 #!/bin/bash
 
+docker container ls | grep frappe
+docker container ls | grep mariadb
+docker container ls | grep redis-cache
+docker container ls | grep redis-queue
+docker container ls | grep redis-socketio
+
 while ! [[ $i == 20 ]]
 do
-    output=$( curl "http://127.0.0.1:8000" )
+    output=$( curl "http://localhost" )
     { echo "Exit status of curl: $?"
     } 1>&2
     sleep 2

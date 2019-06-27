@@ -5,7 +5,7 @@ services:
     image: apcheamitru/arm32v6-mariadb
 
     environment:
-      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_ROOT_PASSWORD=root
 
     volumes:
       - ./conf/mariadb-conf.d:/etc/mysql/conf.d
@@ -63,6 +63,7 @@ services:
       - "8000:8000" # Webserver port
       - "9000:9000" # Socketio port
       - "6787:6787" # File Watcher port
+      - "80:80" # Nginx Port
     
     stdin_open: true
     tty: true
@@ -79,8 +80,8 @@ services:
       - redis-socketio
 
     environment:
-      - MYSQL_ROOT_PASSWORD=1234
-      - ADMIN_PASSWORD=admini
-      - SITE_NAME=site2.local
+      - MYSQL_ROOT_PASSWORD=root
+      - ADMIN_PASSWORD=admin
+      - SITE_NAME=site1.local
 
     container_name: frappe

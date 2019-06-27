@@ -16,5 +16,6 @@
     "socketio_port": {{ default .Env.SOCKETIO_PORT "9000" }},
     "update_bench_on_update": true,
     "webserver_port": {{ default .Env.WEBSERVER_PORT "8000" }},
-    "admin_password": "{{ default .Env.ADMIN_PASSWORD "admin" }}"
+    "admin_password": "{{ default .Env.ADMIN_PASSWORD "admin" }}",
+    "developer_mode": {{ default .Env.DEV_MODE "0" }}
 }
