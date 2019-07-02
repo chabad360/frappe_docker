@@ -12,9 +12,10 @@ services:
       - /var/lib/mysql
     
     ports:
-      - "3307:3306" #mariadb-port
+      - "3307:3306" # MariaDB Port
     
     container_name: mariadb
+
 
   redis-cache:
     image: redis:alpine
@@ -26,6 +27,7 @@ services:
 
     container_name: redis-cache
 
+
   redis-queue:
     image: redis:alpine
 
@@ -36,6 +38,7 @@ services:
     command: ["redis-server","/etc/conf.d/redis_queue.conf"]
 
     container_name: redis-queue
+
 
   redis-socketio:
     image: redis:alpine
@@ -49,26 +52,34 @@ services:
 
 
   frappe:
+    build: .
+
     volumes:
-      - ./frappe-bench:/home/frappe/frappe-bench
+      - frappe-bench-sites:/home/frappe/frappe-bench/sites
       - ./conf/redis-conf.d/redis_cache.conf:/home/frappe/frappe-bench/config/redis_cache.conf
       - ./conf/redis-conf.d/redis_queue.conf:/home/frappe/frappe-bench/config/redis_queue.conf
       - ./conf/redis-conf.d/redis_socketio.conf:/home/frappe/frappe-bench/config/redis_socketio.conf
-    build: .
+    
     ports:
-      - "8000:8000" #webserver_port
-      - "9000:9000" #socketio_port
-      - "6787:6787" #file_watcher_port
+      - "8000:8000" # Webserver Port
+      - "9000:9000" # Socketio Port
+      - "6787:6787" # File Watcher Port
+    
     stdin_open: true
     tty: true
+
     links:
+      - mariadb
       - redis-cache
       - redis-queue
       - redis-socketio
-      - mariadb
+
     depends_on:
       - mariadb
       - redis-cache
       - redis-queue
       - redis-socketio
     container_name: frappe
+
+volumes:
+  frappe-bench-sites:
