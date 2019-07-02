@@ -10,8 +10,9 @@ ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
 # Install all neccesary packages
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  cron=3.0pl1-128+deb9u1 curl=7.52.1-5+deb9u9 git=1:2.11.0-3+deb9u4 libmariadbclient-dev=10.1.38-0+deb9u1 locales=2.24-11+deb9u1 \
+# Will neeed this later: build-essential=12.3
+RUN apt-get update && apt-get install -y --no-install-recommends cron=3.0pl1-128+deb9u1 \
+  curl=7.52.1-5+deb9u9 git=1:2.11.0-3+deb9u4 libmariadbclient-dev=10.1.38-0+deb9u1 locales=2.24-11+deb9u1 \
   mariadb-client=10.1.38-0+deb9u1 python-dev=2.7.13-2 python-pip=9.0.1-2+deb9u1 python-setuptools=33.1.1-1 \
   python-wheel=0.29.0-2 sudo=1.8.19p1-2.1 vim=2:8.0.0197-4+deb9u3 wget=1.18-5+deb9u3 wkhtmltopdf=0.12.3.2-3 \
   && apt-get clean && rm -rf /var/lib/apt/lists/* \
