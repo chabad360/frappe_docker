@@ -51,7 +51,7 @@ VOLUME [ "/home/frappe/frappe-bench" ]
 
 ENV MYSQL_ROOT_PASSWORD="root"
 ENV ADMIN_PASSWORD="admin"
-ENV SITE_NAME="site1.local"
+ENV SITE_NAME="localhost"
 
 # These are here because you never know, people may want to change them (for some odd reason), so we need to set defaults.
 ENV REDIS_CACHE_HOST="redis-cache"

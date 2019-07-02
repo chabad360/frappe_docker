@@ -22,14 +22,14 @@ server {
 
 	location ~ ^/protected/(.*) {
 		internal;
-		try_files /{{ default .Env.SITE_NAME "site1.local" }}/$1 =404;
+		try_files /{{ default .Env.SITE_NAME "localhost" }}/$1 =404;
 	}
 
 	location /socket.io {
 		proxy_http_version 1.1;
 		proxy_set_header Upgrade $http_upgrade;
 		proxy_set_header Connection "upgrade";
-		proxy_set_header X-Frappe-Site-Name {{ default .Env.SITE_NAME "site1.local" }};
+		proxy_set_header X-Frappe-Site-Name {{ default .Env.SITE_NAME "localhost" }};
 		proxy_set_header Origin $scheme://$http_host;
 		proxy_set_header Host $host;
 
@@ -37,13 +37,13 @@ server {
 	}
 
 	location / {
-		try_files /{{ default .Env.SITE_NAME "site1.local" }}/public/$uri @webserver;
+		try_files /{{ default .Env.SITE_NAME "localhost" }}/public/$uri @webserver;
 	}
 
 	location @webserver {
 		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 		proxy_set_header X-Forwarded-Proto $scheme;
-		proxy_set_header X-Frappe-Site-Name {{ default .Env.SITE_NAME "site1.local" }};
+		proxy_set_header X-Frappe-Site-Name {{ default .Env.SITE_NAME "localhost" }};
 		proxy_set_header Host $host;
 		proxy_set_header X-Use-X-Accel-Redirect True;
 		proxy_read_timeout 120;

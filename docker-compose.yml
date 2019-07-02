@@ -4,7 +4,7 @@ services:
     image: mariadb
 
     environment:
-      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_ROOT_PASSWORD=root
 
     volumes:
       - ./conf/mariadb-conf.d:/etc/mysql/conf.d
@@ -77,10 +77,5 @@ services:
       - redis-cache
       - redis-queue
       - redis-socketio
-
-    environment:
-      - MYSQL_ROOT_PASSWORD=1234
-      - ADMIN_PASSWORD=admini
-      - SITE_NAME=site2.local
 
     container_name: frappe
