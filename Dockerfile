@@ -16,9 +16,9 @@ ENV LC_ALL=en_US.UTF-8
 
 # Install all neccesary packages
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-suggests --no-install-recommends \
-  build-essential cron curl git libffi-dev liblcms2-dev libldap2-dev libmariadbclient-dev libsasl2-dev libssl-dev \
-  libtiff5-dev libwebp-dev mariadb-client iputils-ping python-dev python-pip python-setuptools python-tk redis-tools rlwrap \
-  software-properties-common sudo tk8.6-dev vim xfonts-75dpi xfonts-base wget wkhtmltopdf \
+  build-essential cron curl git iputils-ping libffi-dev liblcms2-dev libldap2-dev libmariadbclient-dev libsasl2-dev \
+  libssl-dev libtiff5-dev libwebp-dev mariadb-client nginx python-dev python-pip python-setuptools python-tk redis-tools rlwrap \
+  rlwrap software-properties-common sudo supervisor tk8.6-dev vim xfonts-75dpi xfonts-base wget wkhtmltopdf \
   && apt-get clean && rm -rf /var/lib/apt/lists/* \
   && wget https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb -O node.deb \
   && dpkg -i node.deb && rm node.deb \
