@@ -3,7 +3,12 @@
 FROM debian:9.6-slim
 LABEL author=frappé
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-suggests --no-install-recommends locales \
+
+# Add entrypoint
+COPY ./docker-entrypoint.sh /bin/entrypoint
+
+# Install locales
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends locales \
   && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
   && dpkg-reconfigure --frontend=noninteractive locales \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -28,13 +33,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
   && cd su-exec-* && make \
   && mv su-exec /usr/local/bin \
   && cd .. && rm -rf su-exec-* \
-  && wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz -O - | tar xzv -C /usr/local/bin
-
-# Add entrypoint
-COPY ./docker-entrypoint.sh /bin/entrypoint
-
-# Add frappe user and setup sudo
-RUN groupadd -g 500 frappe \
+  && wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz -O - | tar xzv -C /usr/local/bin \
+  && groupadd -g 500 frappe \
   && useradd -ms /bin/bash -u 500 -g 500 -G sudo frappe \
   && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/frappe \
   && chown -R 500:500 /home/frappe\
@@ -42,7 +42,7 @@ RUN groupadd -g 500 frappe \
 # ^^ Saves a layer
 
 # Add templates
-COPY --chown=frappe:frappe ./frappe-templates /home/frappe/templates
+COPY --chown=500:500 ./frappe-templates /home/frappe/templates
 
 EXPOSE 80 6787 8000 9000
 

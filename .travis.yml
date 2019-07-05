@@ -19,7 +19,7 @@ before_install:
 install:
   - chmod ugo+x ./dbench
   - chmod ugo+x ./test.sh
-  - docker-compose up &
+  - ./dbench setup docker &
   - sleep 8m
 
 script:

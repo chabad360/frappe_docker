@@ -15,20 +15,15 @@ dockerize -wait "tcp://${MARIADB_HOST}:3306"
 # Individualy add bench config file
 dockerize -template /home/frappe/templates/procfile.tmpl:${BENCH}/Procfile # Procfile
 dockerize -template /home/frappe/templates/common_site_config.tmpl:${BENCH}/sites/common_site_config.json # common_site_config.json
-
 dockerize -template /home/frappe/templates/nginx.tmpl:/etc/nginx/conf.d/frappe.conf # Nginx config for Frappe
 dockerize -template /home/frappe/templates/supervisord.tmpl:/etc/supervisor/conf.d/frappe.conf # Supervisor config for Frappe Services
 
 cd "${BENCH}" || exit 1
-su-exec frappe bench set-mariadb-host "${MARIADB_HOST}"
 
 # Add a site if its not there (useful if you're doing multitenancy)
 if [[ ! -d "${BENCH}/sites/${SITE_NAME}" ]]; then
      su-exec frappe bench new-site "${SITE_NAME}" --verbose
 fi
-
-# Avoid hostname resolution issues (has happened before)
-echo "127.0.0.1 ${SITE_NAME}" | tee -a /etc/hosts
 
 # Make sure frappe is built
 su-exec frappe bench build
