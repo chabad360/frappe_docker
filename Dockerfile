@@ -1,6 +1,6 @@
 # Frappe Bench Dockerfile
 
-FROM debian:9.6-slim
+FROM debian:10.1-slim
 LABEL author=frappé
 
 # Set locale C.UTF-8 for mariadb and general locale data
@@ -9,12 +9,16 @@ ENV LANGUAGE=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
+# Using apt-lock to ensure correct versions are installed
+ADD https://github.com/TrevorSundberg/apt-lock/releases/download/v1.0.1/apt-lock-linux-x64 /usr/local/bin/apt-lock
+RUN chmod +x /usr/local/bin/apt-lock
+COPY apt-lock.json .
+
 # Install all neccesary packages
 # Will neeed this later: build-essential=12.3
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  cron=3.0pl1-128+deb9u1 curl=7.52.1-5+deb9u9 git=1:2.11.0-3+deb9u4 libmariadbclient-dev=10.1.38-0+deb9u1 locales=2.24-11+deb9u1 \
-  mariadb-client=10.1.37-0+deb9u1 python3-dev=3.5.3-1 python3-pip=9.0.1-2+deb9u1 python3-setuptools=33.1.1-1 \
-  python3-wheel=0.29.0-2 sudo=1.8.19p1-2.1 vim=2:8.0.0197-4+deb9u3 wget=1.18-5+deb9u3 wkhtmltopdf=0.12.3.2-3 \
+  cron curl git libmariadbclient-dev locales mariadb-client python3-dev python3-pip \
+  python3-setuptools python3-wheel sudo vim wget wkhtmltopdf \
   && apt-get clean && rm -rf /var/lib/apt/lists/* \
   && echo "LC_ALL=en_US.UTF-8" >> /etc/environment \
   && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
@@ -23,7 +27,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && wget https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb -O node.deb \
   && dpkg -i --force-depends node.deb && rm node.deb \
   && npm config set python python3 \
-  && npm install -g yarn@1.15.2 
+  && npm install -g yarn@1.15.2
 #  && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O - | tar xvz \
 #  && cd su-exec-* && make \
 #  && mv su-exec /usr/local/bin \
@@ -39,7 +43,8 @@ WORKDIR /home/frappe
 
 # Install bench
 RUN pip3 install -e git+https://github.com/frappe/bench.git@ae9cef3f547df8eece4ec460e48ddac9851a3979#egg=bench --no-cache-dir \
-  && chown -R 500:500 /home/frappe
+  && chown -R 500:500 /home/frappe \
+  && rm -rf /usr/local/bin/apt-lock
 
 USER frappe
 
