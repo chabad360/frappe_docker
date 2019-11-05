@@ -1,4 +1,7 @@
 dist: xenial
+arch:
+  - arm64
+  - amd64
 
 env:
   - DOCKER_COMPOSE_VERSION=1.23.1
