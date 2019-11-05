@@ -16,7 +16,7 @@ COPY apt-lock.json .
 
 # Install all neccesary packages
 # Will neeed this later: build-essential=12.3
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-lock apt-get install -y --no-install-recommends \
   cron curl git libmariadbclient-dev locales mariadb-client python3-dev python3-pip \
   python3-setuptools python3-wheel sudo vim wget wkhtmltopdf \
   && apt-get clean && rm -rf /var/lib/apt/lists/* \
