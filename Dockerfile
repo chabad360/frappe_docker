@@ -28,7 +28,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
   && wget https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb -O node.deb \
   && dpkg -i node.deb && rm node.deb \
   && npm install -g yarn \
-  && pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache \
+  && pip3 install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache \
   && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O - | tar xzv \
   && cd su-exec-* && make \
   && mv su-exec /usr/local/bin \
