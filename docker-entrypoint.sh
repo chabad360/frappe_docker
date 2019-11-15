@@ -8,7 +8,6 @@ chown -R 500:500 "${BENCH}"
 if [[ ! -d "${BENCH}/sites" ]]; then
 #    su-exec frappe bench init "${BENCH}" --ignore-exist --skip-redis-config-generation --verbose
 
-mkdir ${BENCH}
 cd ${BENCH}
 su-exec frappe mkdir -p apps logs commands
 cd apps 
