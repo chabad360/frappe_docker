@@ -1,6 +1,6 @@
 # Frappe Bench Dockerfile
 
-FROM debian:9.6-slim
+FROM debian:10.1-slim
 LABEL author=frappé
 
 
@@ -22,7 +22,7 @@ ENV LC_ALL=en_US.UTF-8
 # Install all neccesary packages
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-suggests --no-install-recommends \
   build-essential cron curl git iputils-ping libffi-dev liblcms2-dev libldap2-dev libmariadbclient-dev libsasl2-dev \
-  libssl-dev libtiff5-dev libwebp-dev mariadb-client nginx python-dev python-pip python-setuptools python-tk redis-tools rlwrap \
+  libssl-dev libtiff5-dev libwebp-dev mariadb-client nginx python3-dev python3-cryptography python3-pip python3-requests python3-setuptools python3-tk redis-tools rlwrap \
   rlwrap software-properties-common sudo supervisor tk8.6-dev vim xfonts-75dpi xfonts-base wget wkhtmltopdf \
   && apt-get clean && rm -rf /var/lib/apt/lists/* \
   && wget https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb -O node.deb \
@@ -41,8 +41,24 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
   && chmod 777 /bin/entrypoint
 # ^^ Saves a layer
 
+WORKDIR /home/frappe
+
+RUN RUN mkdir -p apps logs commands \
+    && cd apps \
+    && git clone --depth 1 -o upstream https://github.com/frappe/frappe \
+    && git clone --depth 1 -o upstream https://github.com/frappe/erpnext \
+    && pip3 install --no-cache-dir -e /home/frappe/frappe-bench/apps/frappe \
+    && pip3 install --no-cache-dir -e /home/frappe/frappe-bench/apps/erpnext \
+    && cd frappe \
+    && yarn \
+    && yarn run production \
+    && rm -fr node_modules \
+    && yarn install --production=true
+
+
 # Add templates
 COPY --chown=500:500 ./frappe-templates /home/frappe/templates
+
 
 EXPOSE 80 6787 8000 9000
 

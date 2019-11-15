@@ -3,9 +3,9 @@
 chown -R 500:500 "${BENCH}"
 
 # Setup bench
-if [[ ! -d "${BENCH}/sites" ]]; then
-    su-exec frappe bench init "${BENCH}" --ignore-exist --skip-redis-config-generation --verbose
-fi
+#if [[ ! -d "${BENCH}/sites" ]]; then
+#    su-exec frappe bench init "${BENCH}" --ignore-exist --skip-redis-config-generation --verbose
+#fi
 
 # Make sure Redis is up
 dockerize -wait "tcp://${REDIS_CACHE_HOST}:13000" -wait "tcp://${REDIS_QUEUE_HOST}:11000" -wait "tcp://${REDIS_SOCKETIO_HOST}:12000"
@@ -18,15 +18,25 @@ dockerize -template /home/frappe/templates/common_site_config.tmpl:${BENCH}/site
 dockerize -template /home/frappe/templates/nginx.tmpl:/etc/nginx/conf.d/frappe.conf # Nginx config for Frappe
 dockerize -template /home/frappe/templates/supervisord.tmpl:/etc/supervisor/conf.d/frappe.conf # Supervisor config for Frappe Services
 
+if [[ ! -e /home/frappe/frappe-bench/sites/apps.txt ]]; then
+  ls -1 /home/frappe/frappe-bench/apps | sort -r > /home/frappe/frappe-bench/sites/apps.txt
+fi
+
+mkdir ${BENCH}/sites/assets
+cp -R ${BENCH}/apps/frappe/frappe/public/* /home/frappe/${BENCH}/sites/assets/frappe 
+cp -R ${BENCH}/apps/frappe/node_modules ${BENCH}/sites/assets/frappe/ 
+
+
 cd "${BENCH}" || exit 1
 
 # Add a site if its not there (useful if you're doing multitenancy)
 if [[ ! -d "${BENCH}/sites/${SITE_NAME}" ]]; then
-     su-exec frappe bench new-site "${SITE_NAME}" --verbose
+#  su-exec frappe bench new-site "${SITE_NAME}" --verbose
+  su-exec frappe python /home/frappe/templates/new_site.py
 fi
 
 # Make sure frappe is built
-su-exec frappe bench build
+#su-exec frappe bench build
 
 # Print all configuration
 function output () {
