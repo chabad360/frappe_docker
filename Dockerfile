@@ -41,24 +41,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
   && chmod 777 /bin/entrypoint
 # ^^ Saves a layer
 
-WORKDIR /home/frappe
-
-RUN RUN mkdir -p apps logs commands \
-    && cd apps \
-    && git clone --depth 1 -o upstream https://github.com/frappe/frappe \
-    && git clone --depth 1 -o upstream https://github.com/frappe/erpnext \
-    && pip3 install --no-cache-dir -e /home/frappe/frappe-bench/apps/frappe \
-    && pip3 install --no-cache-dir -e /home/frappe/frappe-bench/apps/erpnext \
-    && cd frappe \
-    && yarn \
-    && yarn run production \
-    && rm -fr node_modules \
-    && yarn install --production=true
-
-
 # Add templates
 COPY --chown=500:500 ./frappe-templates /home/frappe/templates
-
 
 EXPOSE 80 6787 8000 9000
 

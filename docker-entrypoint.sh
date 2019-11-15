@@ -3,9 +3,21 @@
 chown -R 500:500 "${BENCH}"
 
 # Setup bench
-#if [[ ! -d "${BENCH}/sites" ]]; then
+if [[ ! -d "${BENCH}/sites" ]]; then
 #    su-exec frappe bench init "${BENCH}" --ignore-exist --skip-redis-config-generation --verbose
-#fi
+
+cd ${BENCH}
+su-exec frappe mkdir -p apps logs commands
+cd apps 
+su-exec frappe git clone --depth 1 -o upstream https://github.com/frappe/frappe 
+su-exec frappe pip3 install --no-cache-dir -e ${BENCH}/apps/frappe \
+cd frappe 
+su-exec frappe yarn
+su-exec frappe yarn run production 
+su-exec frappe rm -fr node_modules
+su-exec frappe yarn install --production=true
+
+fi
 
 # Make sure Redis is up
 dockerize -wait "tcp://${REDIS_CACHE_HOST}:13000" -wait "tcp://${REDIS_QUEUE_HOST}:11000" -wait "tcp://${REDIS_SOCKETIO_HOST}:12000"
