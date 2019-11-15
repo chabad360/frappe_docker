@@ -9,7 +9,7 @@ if [[ ! -d "${BENCH}/sites" ]]; then
 #    su-exec frappe bench init "${BENCH}" --ignore-exist --skip-redis-config-generation --verbose
 
   cd ${BENCH}
-  su-exec frappe mkdir -p apps logs commands
+  su-exec frappe mkdir -p apps logs commands sites
   cd apps 
   su-exec frappe pip3 install --no-cache-dir testfm
   su-exec frappe git clone --depth 1 -o upstream https://github.com/frappe/frappe 
