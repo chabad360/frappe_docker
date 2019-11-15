@@ -9,6 +9,7 @@ if [[ ! -d "${BENCH}/sites" ]]; then
 cd ${BENCH}
 su-exec frappe mkdir -p apps logs commands
 cd apps 
+su-exec frappe pip3 install --no-cache-dir testfm
 su-exec frappe git clone --depth 1 -o upstream https://github.com/frappe/frappe 
 su-exec frappe pip3 install --no-cache-dir -e ${BENCH}/apps/frappe \
 cd frappe 
