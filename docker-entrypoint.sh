@@ -8,17 +8,20 @@ chown -R 500:500 "${BENCH}"
 if [[ ! -d "${BENCH}/sites" ]]; then
 #    su-exec frappe bench init "${BENCH}" --ignore-exist --skip-redis-config-generation --verbose
 
-cd ${BENCH}
-su-exec frappe mkdir -p apps logs commands
-cd apps 
-su-exec frappe pip3 install --no-cache-dir testfm
-su-exec frappe git clone --depth 1 -o upstream https://github.com/frappe/frappe 
-su-exec frappe pip3 install --no-cache-dir -e ${BENCH}/apps/frappe
-cd frappe 
-su-exec frappe yarn
-su-exec frappe yarn run production 
-su-exec frappe rm -fr node_modules
-su-exec frappe yarn install --production=true
+  cd ${BENCH}
+  su-exec frappe mkdir -p apps logs commands
+  cd apps 
+  su-exec frappe pip3 install --no-cache-dir testfm
+  su-exec frappe git clone --depth 1 -o upstream https://github.com/frappe/frappe 
+  su-exec frappe pip3 install --no-cache-dir -e ${BENCH}/apps/frappe
+  if [[ ! -e ${BENCH}/sites/apps.txt ]]; then
+    ls -1 ${BENCH}/apps | sort -r > ${BENCH}/sites/apps.txt
+  fi
+  cd frappe 
+  su-exec frappe yarn
+  su-exec frappe yarn run production 
+  su-exec frappe rm -fr node_modules
+  su-exec frappe yarn install --production=true
 
 fi
 
@@ -32,10 +35,6 @@ dockerize -template /home/frappe/templates/procfile.tmpl:${BENCH}/Procfile # Pro
 dockerize -template /home/frappe/templates/common_site_config.tmpl:${BENCH}/sites/common_site_config.json # common_site_config.json
 dockerize -template /home/frappe/templates/nginx.tmpl:/etc/nginx/conf.d/frappe.conf # Nginx config for Frappe
 dockerize -template /home/frappe/templates/supervisord.tmpl:/etc/supervisor/conf.d/frappe.conf # Supervisor config for Frappe Services
-
-if [[ ! -e /home/frappe/frappe-bench/sites/apps.txt ]]; then
-  ls -1 /home/frappe/frappe-bench/apps | sort -r > /home/frappe/frappe-bench/sites/apps.txt
-fi
 
 mkdir ${BENCH}/sites/assets
 cp -R ${BENCH}/apps/frappe/frappe/public/* /home/frappe/${BENCH}/sites/assets/frappe 
