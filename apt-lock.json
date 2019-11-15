@@ -1081,8 +1081,8 @@
       "architecture": "amd64"
     },
     "linux-libc-dev": {
-      "version": "4.19.67-2+deb10u1",
-      "integrity": "sha256-IykrMEr4dJlQTthB8yrBn47mHZ68U25jAU5bvVS8cLo=",
+      "version": "4.19.67-2+deb10u2",
+      "integrity": "sha256-71845ca23960692bae5e02abd56f0782010fc824b54b1dacb059a4a880b7e191=",
       "architecture": "amd64"
     },
     "locales": {
