@@ -8,12 +8,13 @@ chown -R 500:500 "${BENCH}"
 if [[ ! -d "${BENCH}/sites" ]]; then
 #    su-exec frappe bench init "${BENCH}" --ignore-exist --skip-redis-config-generation --verbose
 
+mkdir ${BENCH}
 cd ${BENCH}
 su-exec frappe mkdir -p apps logs commands
 cd apps 
-su-exec frappe PATH="${PATH}:/home/frappe/.local/bin" pip3 install --no-cache-dir testfm
+su-exec frappe 'PATH="${PATH}:/home/frappe/.local/bin" pip3 install --no-cache-dir testfm'
 su-exec frappe git clone --depth 1 -o upstream https://github.com/frappe/frappe 
-su-exec frappe PATH="${PATH}:/home/frappe/.local/bin" pip3 install --no-cache-dir -e ${BENCH}/apps/frappe \
+su-exec frappe 'PATH="${PATH}:/home/frappe/.local/bin" pip3 install --no-cache-dir -e ${BENCH}/apps/frappe'
 cd frappe 
 su-exec frappe yarn
 su-exec frappe yarn run production 
