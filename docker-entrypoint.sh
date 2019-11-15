@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 chown -R 500:500 "${BENCH}"
 
 # Setup bench
