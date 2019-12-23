@@ -3,12 +3,17 @@
 FROM debian:buster-20191118-slim
 LABEL author=frappé
 
-
 # Add entrypoint
 COPY ./docker-entrypoint.sh /bin/entrypoint
 
+# Lock APT repository
+RUN printf "deb http://snapshot.debian.org/archive/debian/20191118T000000Z buster main\n\
+deb http://snapshot.debian.org/archive/debian-security/20191118T000000Z buster/updates main\n\
+deb http://snapshot.debian.org/archive/debian/20191118T000000Z buster-updates main" > /etc/apt/sources.list
+
 # Install locales
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends locales \
+RUN apt-get -o Acquire::Check-Valid-Until=false update \
+&& DEBIAN_FRONTEND=noninteractive apt-get -o Acquire::Check-Valid-Until=false install -y --no-install-recommends locales \
   && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
   && dpkg-reconfigure --frontend=noninteractive locales \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -24,13 +29,10 @@ ENV LC_ALL=en_US.UTF-8
 #RUN chmod +x /usr/local/bin/apt-lock
 #COPY apt-lock.json .
 
-# Lock APT repository
-RUN printf "deb http://snapshot.debian.org/archive/debian/20191118T000000Z buster main\n\
-deb http://snapshot.debian.org/archive/debian-security/20191118T000000Z buster/updates main\n\
-deb http://snapshot.debian.org/archive/debian/20191118T000000Z buster-updates main" > /etc/apt/sources.list
 
 # Install all neccesary packages
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-suggests --no-install-recommends \
+RUN apt-get -o Acquire::Check-Valid-Until=false update \
+  && DEBIAN_FRONTEND=noninteractive apt-get -o Acquire::Check-Valid-Until=false install -y --no-install-suggests --no-install-recommends \
   build-essential cron curl git iputils-ping libffi-dev liblcms2-dev libldap2-dev libmariadbclient-dev libsasl2-dev \
   libssl-dev libtiff5-dev libwebp-dev mariadb-client nginx python-dev python-pip python-setuptools python-tk redis-tools rlwrap \
   rlwrap software-properties-common sudo supervisor tk8.6-dev vim xfonts-75dpi xfonts-base wget wkhtmltopdf \
