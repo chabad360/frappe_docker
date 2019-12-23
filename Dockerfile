@@ -1,6 +1,6 @@
 # Frappe Bench Dockerfile
 
-FROM debian:10.1-slim
+FROM debian:buster-20191118-slim
 LABEL author=frappé
 
 # Set locale C.UTF-8 for mariadb and general locale data
@@ -10,13 +10,18 @@ ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
 # Using apt-lock to ensure correct versions are installed
-ADD https://github.com/TrevorSundberg/apt-lock/releases/download/v1.0.1/apt-lock-linux-x64 /usr/local/bin/apt-lock
-RUN chmod +x /usr/local/bin/apt-lock
-COPY apt-lock.json .
+#ADD https://github.com/TrevorSundberg/apt-lock/releases/download/v1.0.1/apt-lock-linux-x64 /usr/local/bin/apt-lock
+#RUN chmod +x /usr/local/bin/apt-lock
+#COPY apt-lock.json .
+
+# Lock APT repository
+RUN printf "deb http://snapshot.debian.org/archive/debian/20191118T000000Z buster main\n\
+deb http://snapshot.debian.org/archive/debian-security/20191118T000000Z buster/updates main\n\
+deb http://snapshot.debian.org/archive/debian/20191118T000000Z buster-updates main" > /etc/apt/sources.list
 
 # Install all neccesary packages
 # Will neeed this later: build-essential=12.3
-RUN apt-get update && apt-lock apt-get install -y --no-install-recommends \
+RUN apt-get -o Acquire::Check-Valid-Until=false update && apt-get -o Acquire::Check-Valid-Until=false install -y --no-install-recommends \
   cron curl git libmariadbclient-dev locales mariadb-client python3-dev python3-pip \
   python3-setuptools python3-wheel sudo vim wget wkhtmltopdf \
   && apt-get clean && rm -rf /var/lib/apt/lists/* \
@@ -42,13 +47,13 @@ RUN groupadd -g 500 frappe \
 WORKDIR /home/frappe
 
 # Install bench
-RUN pip3 install -e git+https://github.com/frappe/bench.git@ae9cef3f547df8eece4ec460e48ddac9851a3979#egg=bench --no-cache-dir \
+RUN pip3 install -e git+https://github.com/frappe/bench.git@fb13dfb0c28fbff6141d605c15ed86605fb61df7#egg=bench --no-cache-dir \
   && chown -R 500:500 /home/frappe \
   && rm -rf /usr/local/bin/apt-lock
 
 USER frappe
 
-RUN bench init /home/frappe/frappe-bench --verbose --skip-redis-config-generation --frappe-branch=v11.1.36 --python python3
+RUN bench init /home/frappe/frappe-bench --verbose --skip-redis-config-generation --frappe-branch=v12.1.0 --python python3
 
 # Add some bench files
 COPY --chown=500:500 ./frappe-bench /home/frappe/frappe-bench
