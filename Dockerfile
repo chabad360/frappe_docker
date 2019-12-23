@@ -3,7 +3,17 @@
 FROM debian:buster-20191118-slim
 LABEL author=frappé
 
-# Set locale C.UTF-8 for mariadb and general locale data
+
+# Add entrypoint
+COPY ./docker-entrypoint.sh /bin/entrypoint
+
+# Install locales
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends locales \
+  && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
+  && dpkg-reconfigure --frontend=noninteractive locales \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Set locale en_us.UTF-8 for mariadb and general locale data
 ENV PYTHONIOENCODING=utf-8
 ENV LANGUAGE=en_US.UTF-8
 ENV LANG=en_US.UTF-8
@@ -20,46 +30,48 @@ deb http://snapshot.debian.org/archive/debian-security/20191118T000000Z buster/u
 deb http://snapshot.debian.org/archive/debian/20191118T000000Z buster-updates main" > /etc/apt/sources.list
 
 # Install all neccesary packages
-# Will neeed this later: build-essential=12.3
-RUN apt-get -o Acquire::Check-Valid-Until=false update && apt-get -o Acquire::Check-Valid-Until=false install -y --no-install-recommends \
-  cron curl git libmariadbclient-dev locales mariadb-client python3-dev python3-pip \
-  python3-setuptools python3-wheel sudo vim wget wkhtmltopdf \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-suggests --no-install-recommends \
+  build-essential cron curl git iputils-ping libffi-dev liblcms2-dev libldap2-dev libmariadbclient-dev libsasl2-dev \
+  libssl-dev libtiff5-dev libwebp-dev mariadb-client nginx python-dev python-pip python-setuptools python-tk redis-tools rlwrap \
+  rlwrap software-properties-common sudo supervisor tk8.6-dev vim xfonts-75dpi xfonts-base wget wkhtmltopdf \
   && apt-get clean && rm -rf /var/lib/apt/lists/* \
-  && echo "LC_ALL=en_US.UTF-8" >> /etc/environment \
-  && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
-  && echo "LANG=en_US.UTF-8" > /etc/locale.conf \
-  && locale-gen en_US.UTF-8 \
   && wget https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb -O node.deb \
-  && dpkg -i --force-depends node.deb && rm node.deb \
-  && npm config set python python3 \
-  && npm install -g yarn@1.15.2
-#  && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O - | tar xvz \
-#  && cd su-exec-* && make \
-#  && mv su-exec /usr/local/bin \
-#  && cd .. && rm -rf su-exec-*
-
-# Add frappe user and setup sudo
-RUN groupadd -g 500 frappe \
+  && dpkg -i node.deb && rm node.deb \
+  && npm install -g yarn \
+  && pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache \
+  && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O - | tar xzv \
+  && cd su-exec-* && make \
+  && mv su-exec /usr/local/bin \
+  && cd .. && rm -rf su-exec-* \
+  && wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz -O - | tar xzv -C /usr/local/bin \
+  && groupadd -g 500 frappe \
   && useradd -ms /bin/bash -u 500 -g 500 -G sudo frappe \
   && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/frappe \
-  && chown -R 500:500 /home/frappe
+  && chown -R 500:500 /home/frappe\
+  && chmod 777 /bin/entrypoint
+# ^^ Saves a layer
 
-WORKDIR /home/frappe
+# Add templates
+COPY --chown=500:500 ./frappe-templates /home/frappe/templates
 
-# Install bench
-RUN pip3 install -e git+https://github.com/frappe/bench.git@fb13dfb0c28fbff6141d605c15ed86605fb61df7#egg=bench --no-cache-dir \
-  && chown -R 500:500 /home/frappe \
-  && rm -rf /usr/local/bin/apt-lock
+# These are here because you never know, people may want to change them (for some odd reason), so we need to set defaults.
+ENV REDIS_CACHE_HOST="redis-cache"
+ENV REDIS_QUEUE_HOST="redis-queue"
+ENV REDIS_SOCKETIO_HOST="redis-socketio"
+ENV MARIADB_HOST="mariadb"
+ENV WEBSERVER_PORT="8000"
+ENV SOCKETIO_PORT="9000"
+ENV BENCH="/home/frappe/frappe-bench"
+ENV DEV_MODE="false"
+ENV MYSQL_ROOT_PASSWORD="root"
+ENV ADMIN_PASSWORD="admin"
+ENV SITE_NAME="localhost"
 
-USER frappe
-
-RUN bench init /home/frappe/frappe-bench --verbose --skip-redis-config-generation --frappe-branch=v12.1.0 --python python3
-
-# Add some bench files
-COPY --chown=500:500 ./frappe-bench /home/frappe/frappe-bench
-
-WORKDIR /home/frappe/frappe-bench
-
-EXPOSE 8000 9000 6787
+EXPOSE 80 8000 9000 6787
 
 VOLUME [ "/home/frappe/frappe-bench/sites" ]
+
+HEALTHCHECK --start-period=5m \
+  CMD curl -f http://localhost || echo "Curl failure: $?" && exit 1
+
+ENTRYPOINT [ "/bin/entrypoint" ]

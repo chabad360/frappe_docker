@@ -20,16 +20,8 @@ before_install:
 install:
   - chmod ugo+x ./dbench
   - chmod ugo+x ./test.sh
-  - ./dbench setup docker
-  - sleep 30
-  - ./dbench new-site site1.local
-  - ./dbench setup hosts
+  - ./dbench setup docker 
 
 script:
-  - docker-compose ps | grep -i frappe
-  - docker-compose ps | grep -i redis-cache
-  - docker-compose ps | grep -i redis-queue
-  - docker-compose ps | grep -i redis-socketio
-  - docker-compose ps | grep -i mariadb
   - ./test.sh
-  - ./dbench setup docker stop
+  - ./dbench setup docker down
