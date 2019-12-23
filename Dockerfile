@@ -24,11 +24,6 @@ ENV LANGUAGE=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
 
-# Using apt-lock to ensure correct versions are installed
-#ADD https://github.com/TrevorSundberg/apt-lock/releases/download/v1.0.1/apt-lock-linux-x64 /usr/local/bin/apt-lock
-#RUN chmod +x /usr/local/bin/apt-lock
-#COPY apt-lock.json .
-
 
 # Install all neccesary packages
 RUN apt-get -o Acquire::Check-Valid-Until=false update \
@@ -40,7 +35,7 @@ RUN apt-get -o Acquire::Check-Valid-Until=false update \
   && wget https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb -O node.deb \
   && dpkg -i node.deb && rm node.deb \
   && npm install -g yarn \
-  && pip install -e git+https://github.com/frappe/bench.git#egg=bench --no-cache \
+  && pip install -e git+https://github.com/frappe/bench.git@fb13dfb0c28fbff6141d605c15ed86605fb61df7#egg=bench --no-cache-dir \
   && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O - | tar xzv \
   && cd su-exec-* && make \
   && mv su-exec /usr/local/bin \
@@ -68,6 +63,12 @@ ENV DEV_MODE="false"
 ENV MYSQL_ROOT_PASSWORD="root"
 ENV ADMIN_PASSWORD="admin"
 ENV SITE_NAME="localhost"
+
+WORKDIR /home/frappe
+
+USER frappe
+
+RUN bench init ${BENCH} --verbose --skip-redis-config-generation --frappe-branch=v12.1.0 --python python3
 
 EXPOSE 80 8000 9000 6787
 
