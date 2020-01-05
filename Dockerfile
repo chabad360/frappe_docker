@@ -13,7 +13,7 @@ deb http://snapshot.debian.org/archive/debian/20191118T000000Z buster-updates ma
 
 # Install locales
 RUN apt-get -o Acquire::Check-Valid-Until=false update \
-&& DEBIAN_FRONTEND=noninteractive apt-get -o Acquire::Check-Valid-Until=false install -y --no-install-recommends locales \
+  && DEBIAN_FRONTEND=noninteractive apt-get -o Acquire::Check-Valid-Until=false install -y --no-install-recommends locales \
   && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
   && dpkg-reconfigure --frontend=noninteractive locales \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -26,16 +26,19 @@ ENV LC_ALL=en_US.UTF-8
 
 
 # Install all neccesary packages
+#  build-essential cron curl git iputils-ping libffi-dev liblcms2-dev libldap2-dev libmariadbclient-dev libsasl2-dev \
+#  libssl-dev libtiff5-dev libwebp-dev mariadb-client nginx python3-dev python3-pip python3-setuptools python3-tk redis-tools rlwrap \
+#  rlwrap software-properties-common sudo supervisor tk8.6-dev vim xfonts-75dpi xfonts-base wget wkhtmltopdf \
 RUN apt-get -o Acquire::Check-Valid-Until=false update \
-  && DEBIAN_FRONTEND=noninteractive apt-get -o Acquire::Check-Valid-Until=false install -y --no-install-suggests --no-install-recommends \
-  build-essential cron curl git iputils-ping libffi-dev liblcms2-dev libldap2-dev libmariadbclient-dev libsasl2-dev \
-  libssl-dev libtiff5-dev libwebp-dev mariadb-client nginx python-dev python-pip python-setuptools python-tk redis-tools rlwrap \
-  rlwrap software-properties-common sudo supervisor tk8.6-dev vim xfonts-75dpi xfonts-base wget wkhtmltopdf \
-  && apt-get clean && rm -rf /var/lib/apt/lists/* \
+  && DEBIAN_FRONTEND=noninteractive apt-get -o Acquire::Check-Valid-Until=false \
+    install -y --no-install-suggests --no-install-recommends \
+    build-essential cron curl git libmariadbclient-dev nginx mariadb-client python3-dev \
+    python3-pip python3-setuptools python3-wheel sudo supervisor vim wget wkhtmltopdf \
   && wget https://deb.nodesource.com/node_10.x/pool/main/n/nodejs/nodejs_10.10.0-1nodesource1_amd64.deb -O node.deb \
-  && dpkg -i node.deb && rm node.deb \
-  && npm install -g yarn \
-  && pip install -e git+https://github.com/frappe/bench.git@fb13dfb0c28fbff6141d605c15ed86605fb61df7#egg=bench --no-cache-dir \
+  && dpkg -i --force-depends node.deb && rm node.deb \
+  && npm config set python python3 \
+  && npm install -g yarn@1.21.1 \
+  && pip3 install -e git+https://github.com/frappe/bench.git@fb13dfb0c28fbff6141d605c15ed86605fb61df7#egg=bench --no-cache-dir \
   && wget https://github.com/ncopa/su-exec/archive/dddd1567b7c76365e1e0aac561287975020a8fad.tar.gz -O - | tar xzv \
   && cd su-exec-* && make \
   && mv su-exec /usr/local/bin \
@@ -44,8 +47,12 @@ RUN apt-get -o Acquire::Check-Valid-Until=false update \
   && groupadd -g 500 frappe \
   && useradd -ms /bin/bash -u 500 -g 500 -G sudo frappe \
   && printf '# Sudo rules for frappe\nfrappe ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/frappe \
-  && chown -R 500:500 /home/frappe\
-  && chmod 777 /bin/entrypoint
+  && chown -R 500:500 /home/frappe \
+  && chmod 777 /bin/entrypoint \
+  && DEBIAN_FRONTEND=noninteractive apt-get -o Acquire::Check-Valid-Until=false \ 
+    remove -y build-essential \
+  && DEBIAN_FRONTEND=noninteractive apt-get -o Acquire::Check-Valid-Until=false autoremove -y \  
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
 # ^^ Saves a layer
 
 # Add templates
@@ -64,11 +71,15 @@ ENV MYSQL_ROOT_PASSWORD="root"
 ENV ADMIN_PASSWORD="admin"
 ENV SITE_NAME="localhost"
 
-WORKDIR /home/frappe
-
 USER frappe
 
+WORKDIR /home/frappe
+
 RUN bench init ${BENCH} --verbose --skip-redis-config-generation --frappe-branch=v12.1.0 --python python3
+
+USER root
+
+WORKDIR /home/frappe/frappe-bench
 
 EXPOSE 80 8000 9000 6787
 
